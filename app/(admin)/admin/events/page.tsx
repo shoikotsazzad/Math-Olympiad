@@ -1,0 +1,317 @@
+"use client";
+
+import { useState } from "react";
+import { useEventsStore, type InternalEvent } from "@/store/eventsStore";
+import type { Event, OlympiadType } from "@/types";
+import {
+  Plus, Trash2, Pencil, X, Check, Search, Calendar,
+  MapPin, ExternalLink, Shield, Clock,
+} from "lucide-react";
+
+const typeColors: Record<string, string> = {
+  IMO: "#7c3aed", BdMO: "#10b981", AMC: "#f59e0b", INTERNAL: "#0891b2",
+};
+const internalTypeColors: Record<string, string> = {
+  "MOCK SESSION": "#7c3aed", "DISCUSSION CLASS": "#0891b2", CHALLENGE: "#f59e0b",
+};
+const olympiadTypes: OlympiadType[] = ["IMO", "BdMO", "AMC", "INTERNAL"];
+const internalTypes = ["MOCK SESSION", "DISCUSSION CLASS", "CHALLENGE"];
+const internalColorOptions = ["violet", "blue", "gold", "green", "red"];
+
+type Tab = "olympiad" | "internal";
+
+const blankEvent = (): Omit<Event, "id"> => ({
+  title: "", type: "BdMO", date: "", location: "", description: "",
+  isInternal: false, officialLink: "", registrationLink: "",
+});
+
+const blankInternal = (): Omit<InternalEvent, "id"> => ({
+  title: "", subtitle: "", date: "", time: "", type: "MOCK SESSION", typeColor: "violet",
+});
+
+export default function AdminEventsPage() {
+  const {
+    events, internalEvents,
+    addEvent, updateEvent, removeEvent,
+    addInternal, updateInternal, removeInternal,
+  } = useEventsStore();
+
+  const [tab, setTab] = useState<Tab>("olympiad");
+  const [search, setSearch] = useState("");
+  const [showForm, setShowForm] = useState(false);
+  const [editId, setEditId] = useState<string | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+
+  // Olympiad form
+  const [evForm, setEvForm] = useState(blankEvent());
+  // Internal form
+  const [intForm, setIntForm] = useState(blankInternal());
+
+  const openCreateOlympiad = () => { setEvForm(blankEvent()); setEditId(null); setShowForm(true); setTab("olympiad"); };
+  const openCreateInternal = () => { setIntForm(blankInternal()); setEditId(null); setShowForm(true); setTab("internal"); };
+
+  const openEditOlympiad = (e: Event) => {
+    setEvForm({ title: e.title, type: e.type, date: e.date, location: e.location, description: e.description, isInternal: e.isInternal, officialLink: e.officialLink, registrationLink: e.registrationLink });
+    setEditId(e.id); setShowForm(true); setTab("olympiad");
+  };
+  const openEditInternal = (e: InternalEvent) => {
+    setIntForm({ title: e.title, subtitle: e.subtitle, date: e.date, time: e.time, type: e.type, typeColor: e.typeColor });
+    setEditId(e.id); setShowForm(true); setTab("internal");
+  };
+
+  const saveOlympiad = () => {
+    if (!evForm.title.trim()) return;
+    if (editId) { updateEvent(editId, evForm); }
+    else { addEvent({ id: `ev-${Date.now()}`, ...evForm }); }
+    setShowForm(false);
+  };
+  const saveInternal = () => {
+    if (!intForm.title.trim()) return;
+    if (editId) { updateInternal(editId, intForm); }
+    else { addInternal({ id: `int-${Date.now()}`, ...intForm }); }
+    setShowForm(false);
+  };
+
+  const doDelete = () => {
+    if (!deleteId) return;
+    if (tab === "olympiad") removeEvent(deleteId);
+    else removeInternal(deleteId);
+    setDeleteId(null);
+  };
+
+  const filteredEvents = events.filter((e) => e.title.toLowerCase().includes(search.toLowerCase()));
+  const filteredInternal = internalEvents.filter((e) => e.title.toLowerCase().includes(search.toLowerCase()));
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between flex-wrap gap-4">
+        <div>
+          <h1 className="font-heading text-3xl font-bold text-white flex items-center gap-2">
+            <Shield size={24} className="text-[#a78bfa]" /> Events Management
+          </h1>
+          <p className="text-[#94a3b8] text-sm mt-1">Create, edit and manage olympiad events and internal sessions.</p>
+        </div>
+        <button
+          onClick={tab === "olympiad" ? openCreateOlympiad : openCreateInternal}
+          className="flex items-center gap-2 gradient-violet glow-violet text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:scale-105 transition-all"
+        >
+          <Plus size={16} /> New {tab === "olympiad" ? "Event" : "Session"}
+        </button>
+      </div>
+
+      {/* Tabs & Search */}
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="flex gap-2">
+          {([["olympiad", "Olympiad Events"], ["internal", "Internal Sessions"]] as [Tab, string][]).map(([t, label]) => (
+            <button key={t} onClick={() => { setTab(t); setShowForm(false); }}
+              className={`px-4 py-2 rounded-full text-xs font-medium transition-all ${tab === t ? "gradient-violet text-white" : "bg-white/[0.06] text-[#94a3b8] hover:text-white hover:bg-white/[0.1]"}`}>
+              {label}
+            </button>
+          ))}
+        </div>
+        <div className="relative ml-auto">
+          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#64748b]" />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search events..."
+            className="bg-white/[0.06] border border-white/[0.08] rounded-xl pl-9 pr-4 py-2 text-sm text-[#94a3b8] placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 w-52 transition-all" />
+        </div>
+      </div>
+
+      {/* Create / Edit Form */}
+      {showForm && (
+        <div className="glass rounded-2xl p-6 border border-[#7c3aed]/30 space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="font-heading font-semibold text-white">
+              {editId ? "Edit" : "New"} {tab === "olympiad" ? "Olympiad Event" : "Internal Session"}
+            </h3>
+            <button onClick={() => setShowForm(false)} className="text-[#64748b] hover:text-white"><X size={18} /></button>
+          </div>
+
+          {tab === "olympiad" ? (
+            <>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Title *</label>
+                  <input value={evForm.title} onChange={(e) => setEvForm({ ...evForm, title: e.target.value })}
+                    placeholder="e.g. International Mathematical Olympiad"
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all" />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Type</label>
+                  <select value={evForm.type} onChange={(e) => setEvForm({ ...evForm, type: e.target.value as OlympiadType })}
+                    className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50">
+                    {olympiadTypes.map((t) => <option key={t} value={t} className="bg-[#0f0f1a]">{t}</option>)}
+                  </select>
+                </div>
+              </div>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Date</label>
+                  <input value={evForm.date} onChange={(e) => setEvForm({ ...evForm, date: e.target.value })}
+                    placeholder="e.g. July 11-22, 2024"
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all" />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Location</label>
+                  <input value={evForm.location} onChange={(e) => setEvForm({ ...evForm, location: e.target.value })}
+                    placeholder="e.g. United Kingdom"
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all" />
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Description</label>
+                <textarea value={evForm.description} onChange={(e) => setEvForm({ ...evForm, description: e.target.value })}
+                  rows={2} placeholder="Brief description..."
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all resize-none" />
+              </div>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Official Link</label>
+                  <input value={evForm.officialLink ?? ""} onChange={(e) => setEvForm({ ...evForm, officialLink: e.target.value })}
+                    placeholder="https://..."
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all" />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Registration Link</label>
+                  <input value={evForm.registrationLink ?? ""} onChange={(e) => setEvForm({ ...evForm, registrationLink: e.target.value })}
+                    placeholder="https://..."
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all" />
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Title *</label>
+                  <input value={intForm.title} onChange={(e) => setIntForm({ ...intForm, title: e.target.value })}
+                    placeholder="e.g. UIU Grand Mock 05"
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all" />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Subtitle</label>
+                  <input value={intForm.subtitle} onChange={(e) => setIntForm({ ...intForm, subtitle: e.target.value })}
+                    placeholder="e.g. Topic: Combinatorics"
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all" />
+                </div>
+              </div>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Date</label>
+                  <input value={intForm.date} onChange={(e) => setIntForm({ ...intForm, date: e.target.value })}
+                    placeholder="e.g. Sat, 21 Oct"
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all" />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Time</label>
+                  <input value={intForm.time} onChange={(e) => setIntForm({ ...intForm, time: e.target.value })}
+                    placeholder="e.g. 3:00 PM"
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all" />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Type</label>
+                  <select value={intForm.type} onChange={(e) => setIntForm({ ...intForm, type: e.target.value })}
+                    className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50">
+                    {internalTypes.map((t) => <option key={t} value={t} className="bg-[#0f0f1a]">{t}</option>)}
+                  </select>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Color</label>
+                  <select value={intForm.typeColor} onChange={(e) => setIntForm({ ...intForm, typeColor: e.target.value })}
+                    className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50">
+                    {internalColorOptions.map((c) => <option key={c} value={c} className="bg-[#0f0f1a]">{c}</option>)}
+                  </select>
+                </div>
+              </div>
+            </>
+          )}
+
+          <div className="flex gap-3 justify-end">
+            <button onClick={() => setShowForm(false)} className="px-5 py-2 rounded-xl text-sm text-[#94a3b8] hover:text-white transition-colors">Cancel</button>
+            <button onClick={tab === "olympiad" ? saveOlympiad : saveInternal}
+              disabled={tab === "olympiad" ? !evForm.title.trim() : !intForm.title.trim()}
+              className="flex items-center gap-2 gradient-violet text-white text-sm font-semibold px-5 py-2 rounded-xl hover:scale-105 transition-all disabled:opacity-50 disabled:scale-100">
+              <Check size={15} /> {editId ? "Save Changes" : "Create"}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Delete confirm */}
+      {deleteId && (
+        <div className="glass rounded-2xl p-5 border border-red-500/30 flex items-center justify-between gap-4">
+          <p className="text-sm text-white">Are you sure you want to <span className="text-red-400 font-semibold">delete</span> this event?</p>
+          <div className="flex gap-2 shrink-0">
+            <button onClick={() => setDeleteId(null)} className="px-4 py-1.5 rounded-lg text-sm text-[#94a3b8] hover:text-white transition-colors">Cancel</button>
+            <button onClick={doDelete} className="px-4 py-1.5 rounded-lg text-sm bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors font-medium">Delete</button>
+          </div>
+        </div>
+      )}
+
+      {/* Olympiad Events List */}
+      {tab === "olympiad" && (
+        <div className="space-y-3">
+          {filteredEvents.map((ev) => {
+            const color = typeColors[ev.type] ?? "#7c3aed";
+            return (
+              <div key={ev.id} className="glass rounded-2xl p-5 flex items-start justify-between gap-4">
+                <div className="flex-1 min-w-0 space-y-2">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full uppercase"
+                      style={{ backgroundColor: `${color}20`, color }}>{ev.type}</span>
+                  </div>
+                  <p className="font-heading font-semibold text-white text-sm">{ev.title}</p>
+                  <p className="text-xs text-[#64748b] line-clamp-2">{ev.description}</p>
+                  <div className="flex flex-wrap gap-3 text-xs text-[#94a3b8]">
+                    <span className="flex items-center gap-1.5"><Calendar size={11} /> {ev.date}</span>
+                    <span className="flex items-center gap-1.5"><MapPin size={11} /> {ev.location}</span>
+                    {ev.officialLink && (
+                      <span className="flex items-center gap-1.5"><ExternalLink size={11} /> {ev.officialLink}</span>
+                    )}
+                  </div>
+                </div>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <button onClick={() => openEditOlympiad(ev)} className="p-2 rounded-lg text-[#64748b] hover:text-[#a78bfa] hover:bg-[#7c3aed]/10 transition-colors"><Pencil size={15} /></button>
+                  <button onClick={() => { setDeleteId(ev.id); setTab("olympiad"); }} className="p-2 rounded-lg text-[#64748b] hover:text-red-400 hover:bg-red-500/10 transition-colors"><Trash2 size={15} /></button>
+                </div>
+              </div>
+            );
+          })}
+          {filteredEvents.length === 0 && <p className="text-center text-[#64748b] text-sm py-10">No olympiad events found.</p>}
+          <p className="text-xs text-[#475569] text-center">{filteredEvents.length} of {events.length} events</p>
+        </div>
+      )}
+
+      {/* Internal Sessions List */}
+      {tab === "internal" && (
+        <div className="space-y-3">
+          {filteredInternal.map((ev) => {
+            const color = internalTypeColors[ev.type] ?? "#7c3aed";
+            return (
+              <div key={ev.id} className="glass rounded-2xl p-5 flex items-start justify-between gap-4">
+                <div className="flex-1 min-w-0 space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-bold uppercase px-1.5 py-0.5 rounded"
+                      style={{ backgroundColor: `${color}25`, color }}>{ev.type}</span>
+                  </div>
+                  <p className="font-heading font-semibold text-white text-sm">{ev.title}</p>
+                  <p className="text-xs text-[#64748b]">{ev.subtitle}</p>
+                  <div className="flex gap-3 text-xs text-[#94a3b8]">
+                    <span className="flex items-center gap-1.5"><Calendar size={11} /> {ev.date}</span>
+                    <span className="flex items-center gap-1.5"><Clock size={11} /> {ev.time}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <button onClick={() => openEditInternal(ev)} className="p-2 rounded-lg text-[#64748b] hover:text-[#a78bfa] hover:bg-[#7c3aed]/10 transition-colors"><Pencil size={15} /></button>
+                  <button onClick={() => { setDeleteId(ev.id); setTab("internal"); }} className="p-2 rounded-lg text-[#64748b] hover:text-red-400 hover:bg-red-500/10 transition-colors"><Trash2 size={15} /></button>
+                </div>
+              </div>
+            );
+          })}
+          {filteredInternal.length === 0 && <p className="text-center text-[#64748b] text-sm py-10">No internal sessions found.</p>}
+          <p className="text-xs text-[#475569] text-center">{filteredInternal.length} of {internalEvents.length} sessions</p>
+        </div>
+      )}
+    </div>
+  );
+}

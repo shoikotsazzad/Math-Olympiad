@@ -1,0 +1,63 @@
+import type { DashboardStats, LeaderboardEntry } from "@/types";
+
+export const dashboardStats: DashboardStats = {
+  testsTaken: 142,
+  averageScore: 88,
+  bestScore: 99,
+  totalTime: "48h 20m",
+  topicMastery: [
+    { topic: "Algebra", accuracy: 92, speed: 85 },
+    { topic: "Combinatorics", accuracy: 86, speed: 80 },
+    { topic: "Number Theory", accuracy: 78, speed: 70 },
+    { topic: "Geometry", accuracy: 64, speed: 60 },
+  ],
+  recentActivity: [
+    { type: "test", title: "Completed: Advanced Geometry Mock #4", score: "94/100", time: "2h ago" },
+    { type: "badge", title: "Earned Badge: Prime Master", xp: 250, time: "Yesterday" },
+    { type: "community", title: 'Replied in "Trigonometric Identities help"', time: "2 days ago" },
+    { type: "test", title: "Completed: Algebra Sprint #7", score: "88/100", time: "3 days ago" },
+  ],
+  learningPath: [
+    { title: "Foundation Calculus", progress: 100, status: "completed" },
+    { title: "Linear Equations", progress: 75, status: "in_progress" },
+    { title: "Differential Topology", progress: 0, status: "locked" },
+  ],
+  recommendedNext: {
+    title: "Combinatorial Structures II",
+    topic: "Combinatorics",
+    level: "Advanced",
+  },
+};
+
+export const leaderboard: LeaderboardEntry[] = [
+  { rank: 1, name: "Adnan Chowdhury", department: "CSE", rating: 2409, trend: "up" },
+  { rank: 2, name: "Sarah Jubaida", department: "EEE", rating: 2382, trend: "up" },
+  { rank: 3, name: "Rahat Khan", department: "CSE", rating: 2199, trend: "stable" },
+  { rank: 4, name: "Nadia Islam", department: "Math", rating: 2054, trend: "up" },
+  { rank: 5, name: "Fahim Hossain", department: "CSE", rating: 1987, trend: "down" },
+  { rank: 6, name: "Lamia Akter", department: "EEE", rating: 1876, trend: "up" },
+  { rank: 7, name: "Tahmid Reza", department: "CSE", rating: 1754, trend: "down" },
+  { rank: 8, name: "Rifat Ahmed", department: "Math", rating: 1698, trend: "up" },
+  { rank: 9, name: "Maliha Sultana", department: "CSE", rating: 1642, trend: "stable" },
+  { rank: 10, name: "Arif Hasan", department: "EEE", rating: 1589, trend: "down" },
+  { rank: 11, name: "Sabrina Yeasmin", department: "Math", rating: 1534, trend: "up" },
+  { rank: 12, name: "Tanvir Anjum", department: "CSE", rating: 1498, trend: "stable" },
+  { rank: 13, name: "Tasfia Ahmed", department: "EEE", rating: 1456, trend: "up" },
+  { rank: 14, name: "Samiul Islam", department: "Math", rating: 1412, trend: "down" },
+  { rank: 15, name: "Nabila Tabassum", department: "CSE", rating: 1387, trend: "up" },
+  { rank: 16, name: "Zubair Rahman", department: "EEE", rating: 1345, trend: "stable" },
+  { rank: 17, name: "Mehedi Hasan", department: "Math", rating: 1312, trend: "up" },
+  { rank: 18, name: "Anika Tahsin", department: "CSE", rating: 1289, trend: "down" },
+  { rank: 19, name: "Sajid Khan", department: "EEE", rating: 1256, trend: "up" },
+  { rank: 20, name: "Fariha Alam", department: "Math", rating: 1223, trend: "stable" },
+  { rank: 21, name: "Imtiaz Ahmed", department: "CSE", rating: 1198, trend: "up" },
+  { rank: 22, name: "Ishrat Jahan", department: "EEE", rating: 1167, trend: "down" },
+  { rank: 23, name: "Abrar Shakil", department: "Math", rating: 1134, trend: "up" },
+  { rank: 24, name: "Sumaiya Haque", department: "CSE", rating: 1102, trend: "stable" },
+  { rank: 25, name: "Rakibul Islam", department: "EEE", rating: 1087, trend: "up" },
+  { rank: 26, name: "Niaz Morshed", department: "Math", rating: 1056, trend: "down" },
+  { rank: 27, name: "Sadia Afrin", department: "CSE", rating: 1023, trend: "up" },
+  { rank: 28, name: "Asif Iqbal", department: "EEE", rating: 998, trend: "stable" },
+  { rank: 29, name: "Tasmia Zaman", department: "Math", rating: 967, trend: "up" },
+  { rank: 30, name: "Mahmudul Hasan", department: "CSE", rating: 945, trend: "down" },
+];
