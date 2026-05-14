@@ -12,6 +12,7 @@ import {
   BookOpen,
   MessageSquare,
   UserCircle,
+  Radio,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/authStore";
@@ -19,6 +20,7 @@ import { useAuthStore } from "@/store/authStore";
 const studentLinks = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
   { icon: Puzzle, label: "Daily Puzzle", href: "/daily-puzzle" },
+  { icon: Radio, label: "Live Exam", href: "/live-exam" },
   { icon: FileText, label: "Tests", href: "/tests" },
   { icon: Sigma, label: "Topics", href: "/topics" },
   { icon: Users, label: "Community", href: "/community" },

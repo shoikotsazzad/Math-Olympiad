@@ -3,6 +3,7 @@
 import { useUsersStore } from "@/store/usersStore";
 import { Users, TrendingUp, Trophy, BookOpen, Search, Trash2, Eye } from "lucide-react";
 import { useState } from "react";
+import type { Tier } from "@/types";
 
 const levelColors: Record<string, string> = {
   Grandmaster: "#f59e0b",
@@ -12,6 +13,7 @@ const levelColors: Record<string, string> = {
   Intermediate: "#0891b2",
   Beginner: "#64748b",
 };
+const tierColors: Record<Tier, string> = { Beginner: "#10b981", Intermediate: "#f59e0b", Advanced: "#7c3aed" };
 
 export default function AdminDashboardPage() {
   const { users, removeUser } = useUsersStore();
@@ -21,11 +23,16 @@ export default function AdminDashboardPage() {
     (u) =>
       u.name.toLowerCase().includes(search.toLowerCase()) ||
       u.email.toLowerCase().includes(search.toLowerCase()) ||
-      u.dept.toLowerCase().includes(search.toLowerCase())
+      u.dept.toLowerCase().includes(search.toLowerCase()) ||
+      u.tier.toLowerCase().includes(search.toLowerCase()) ||
+      u.institute.toLowerCase().includes(search.toLowerCase())
   );
 
   const activeCount = users.filter((u) => u.status === "active").length;
   const avgScore = users.length > 0 ? Math.round(users.reduce((s, u) => s + u.avgScore, 0) / users.length) : 0;
+  const beginnerCount = users.filter((u) => u.tier === "Beginner").length;
+  const intermediateCount = users.filter((u) => u.tier === "Intermediate").length;
+  const advancedCount = users.filter((u) => u.tier === "Advanced").length;
 
   return (
     <div className="space-y-6">
@@ -36,7 +43,7 @@ export default function AdminDashboardPage() {
         </p>
       </div>
 
-      {/* Stats */}
+      {/* Top stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: "Total Students", value: users.length, icon: Users, color: "#7c3aed" },
@@ -56,6 +63,29 @@ export default function AdminDashboardPage() {
         ))}
       </div>
 
+      {/* Tier breakdown */}
+      <div className="grid grid-cols-3 gap-4">
+        {([
+          { tier: "Beginner" as Tier, count: beginnerCount, subtitle: "School level" },
+          { tier: "Intermediate" as Tier, count: intermediateCount, subtitle: "College level" },
+          { tier: "Advanced" as Tier, count: advancedCount, subtitle: "University level" },
+        ]).map(({ tier, count, subtitle }) => {
+          const color = tierColors[tier];
+          return (
+            <div key={tier} className="glass rounded-xl p-5" style={{ borderColor: `${color}25`, borderWidth: 1 }}>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-semibold px-2 py-0.5 rounded-full" style={{ backgroundColor: `${color}18`, color }}>{tier}</span>
+                <span className="font-heading text-2xl font-bold text-white">{count}</span>
+              </div>
+              <p className="text-xs text-[#64748b]">{subtitle}</p>
+              <div className="mt-2 h-1 rounded-full bg-white/[0.06] overflow-hidden">
+                <div className="h-full rounded-full" style={{ width: `${users.length ? (count / users.length) * 100 : 0}%`, backgroundColor: color }} />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
       {/* All Users Table */}
       <div className="glass rounded-2xl overflow-hidden">
         <div className="flex items-center justify-between px-6 py-5 border-b border-white/[0.06]">
@@ -65,8 +95,8 @@ export default function AdminDashboardPage() {
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search by name, email, dept..."
-              className="bg-white/[0.06] border border-white/[0.08] rounded-lg pl-9 pr-4 py-2 text-sm text-[#94a3b8] placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 w-64 transition-all"
+              placeholder="Search name, email, tier, institute..."
+              className="bg-white/[0.06] border border-white/[0.08] rounded-lg pl-9 pr-4 py-2 text-sm text-[#94a3b8] placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 w-72 transition-all"
             />
           </div>
         </div>
@@ -76,11 +106,11 @@ export default function AdminDashboardPage() {
             <thead>
               <tr className="text-xs text-[#64748b] uppercase tracking-wider border-b border-white/[0.04]">
                 <th className="text-left py-3 px-6 font-medium">Student</th>
-                <th className="text-left py-3 px-6 font-medium hidden md:table-cell">Dept</th>
-                <th className="text-left py-3 px-6 font-medium hidden lg:table-cell">Level</th>
+                <th className="text-left py-3 px-6 font-medium hidden md:table-cell">Tier</th>
+                <th className="text-left py-3 px-6 font-medium hidden lg:table-cell">Institute</th>
+                <th className="text-left py-3 px-6 font-medium hidden xl:table-cell">Level</th>
                 <th className="text-right py-3 px-6 font-medium hidden sm:table-cell">XP</th>
                 <th className="text-right py-3 px-6 font-medium hidden md:table-cell">Streak</th>
-                <th className="text-right py-3 px-6 font-medium hidden lg:table-cell">Tests</th>
                 <th className="text-right py-3 px-6 font-medium">Score</th>
                 <th className="text-center py-3 px-6 font-medium hidden sm:table-cell">Status</th>
                 <th className="text-right py-3 px-6 font-medium">Actions</th>
@@ -101,13 +131,13 @@ export default function AdminDashboardPage() {
                     </div>
                   </td>
                   <td className="py-3.5 px-6 hidden md:table-cell">
-                    <span className="text-sm text-[#94a3b8]">{user.dept}</span>
+                    <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: `${tierColors[user.tier]}18`, color: tierColors[user.tier] }}>{user.tier}</span>
                   </td>
                   <td className="py-3.5 px-6 hidden lg:table-cell">
-                    <span
-                      className="text-xs font-medium px-2 py-0.5 rounded-full"
-                      style={{ backgroundColor: `${levelColors[user.level] ?? "#64748b"}18`, color: levelColors[user.level] ?? "#64748b" }}
-                    >
+                    <span className="text-xs text-[#94a3b8]">{user.institute}</span>
+                  </td>
+                  <td className="py-3.5 px-6 hidden xl:table-cell">
+                    <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: `${levelColors[user.level] ?? "#64748b"}18`, color: levelColors[user.level] ?? "#64748b" }}>
                       {user.level}
                     </span>
                   </td>
@@ -116,9 +146,6 @@ export default function AdminDashboardPage() {
                   </td>
                   <td className="py-3.5 px-6 text-right hidden md:table-cell">
                     <span className="text-sm text-[#f59e0b]">{user.streak}d</span>
-                  </td>
-                  <td className="py-3.5 px-6 text-right hidden lg:table-cell">
-                    <span className="text-sm text-[#94a3b8]">{user.testsTaken}</span>
                   </td>
                   <td className="py-3.5 px-6 text-right">
                     <span className={`text-sm font-semibold ${user.avgScore >= 80 ? "text-[#10b981]" : user.avgScore >= 65 ? "text-[#f59e0b]" : "text-red-400"}`}>

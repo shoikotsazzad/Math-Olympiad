@@ -7,6 +7,7 @@ export const topics: Topic[] = [
     name: "Algebra",
     description:
       "Polynomials, functional equations, and complex inequalities. Master the language of variables and abstract structures.",
+    tier: "Beginner",
     level: "Beginner",
     lessonCount: 14,
     problemCount: 120,
@@ -18,6 +19,7 @@ export const topics: Topic[] = [
     name: "Geometry",
     description:
       "Euclidean constructions, projective geometry, and advanced circle theorems. Visualizing logic through spatial forms.",
+    tier: "Intermediate",
     level: "Intermediate",
     lessonCount: 15,
     problemCount: 98,
@@ -29,6 +31,7 @@ export const topics: Topic[] = [
     name: "Number Theory",
     description:
       "Modular arithmetic, Diophantine equations, and prime distribution — the profound properties of integers.",
+    tier: "Advanced",
     level: "Advanced",
     lessonCount: 12,
     problemCount: 110,
@@ -40,6 +43,7 @@ export const topics: Topic[] = [
     name: "Combinatorics",
     description:
       "Graph theory, pigeonhole principle, and generating functions. Counting the infinite ways elements can be combined.",
+    tier: "Intermediate",
     level: "Intermediate",
     lessonCount: 11,
     problemCount: 88,
@@ -51,6 +55,7 @@ export const topics: Topic[] = [
     name: "Inequalities",
     description:
       "AM-GM, Cauchy-Schwarz, and Jensen's inequality. Mastery of bounds and extremal values.",
+    tier: "Advanced",
     level: "Advanced",
     lessonCount: 8,
     problemCount: 72,
@@ -62,6 +67,7 @@ export const topics: Topic[] = [
     name: "Mathematical Logic",
     description:
       "The cornerstone of all proof-based mathematics. Set theory, formal proofs, and structural integrity of mathematical arguments.",
+    tier: "Beginner",
     level: "Beginner",
     lessonCount: 10,
     problemCount: 60,

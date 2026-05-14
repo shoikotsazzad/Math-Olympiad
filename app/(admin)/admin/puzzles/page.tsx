@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Plus, Trash2, Pencil, X, Check, Puzzle } from "lucide-react";
+import type { Tier } from "@/types";
 
 type Difficulty = "Beginner" | "Intermediate" | "Advanced" | "Elite";
 
@@ -11,26 +12,29 @@ interface PuzzleItem {
   title: string;
   content: string;
   difficulty: Difficulty;
+  tier: Tier;
   topic: string;
 }
 
 const initialPuzzles: PuzzleItem[] = [
-  { id: "p1", date: "March 14, 2024", title: "Pi Day Divisibility", content: "Find the number of positive integers $a$ such that $a + 50$ divides $a^2 + 100$.", difficulty: "Intermediate", topic: "Combinatorics" },
-  { id: "p2", date: "March 13, 2024", title: "The Divisibility Paradox", content: "Prove that for any integer $n$, the expression $n^3 - n$ is always divisible by 6.", difficulty: "Beginner", topic: "Number Theory" },
-  { id: "p3", date: "March 12, 2024", title: "The Pigeonhole Labyrinth", content: "In a group of 13 people, show that at least two share a birth month.", difficulty: "Beginner", topic: "Combinatorics" },
-  { id: "p4", date: "March 11, 2024", title: "Euclid's Trinity Mystery", content: "Find all triples $(a,b,c)$ of positive integers satisfying $\\frac{1}{a} + \\frac{1}{b} + \\frac{1}{c} = 1$.", difficulty: "Advanced", topic: "Number Theory" },
+  { id: "p1", date: "March 14, 2024", title: "Pi Day Divisibility", content: "Find the number of positive integers $a$ such that $a + 50$ divides $a^2 + 100$.", difficulty: "Intermediate", tier: "Intermediate", topic: "Combinatorics" },
+  { id: "p2", date: "March 13, 2024", title: "The Divisibility Paradox", content: "Prove that for any integer $n$, the expression $n^3 - n$ is always divisible by 6.", difficulty: "Beginner", tier: "Beginner", topic: "Number Theory" },
+  { id: "p3", date: "March 12, 2024", title: "The Pigeonhole Labyrinth", content: "In a group of 13 people, show that at least two share a birth month.", difficulty: "Beginner", tier: "Beginner", topic: "Combinatorics" },
+  { id: "p4", date: "March 11, 2024", title: "Euclid's Trinity Mystery", content: "Find all triples $(a,b,c)$ of positive integers satisfying $\\frac{1}{a} + \\frac{1}{b} + \\frac{1}{c} = 1$.", difficulty: "Advanced", tier: "Advanced", topic: "Number Theory" },
 ];
 
 const difficulties: Difficulty[] = ["Beginner", "Intermediate", "Advanced", "Elite"];
+const tiers: Tier[] = ["Beginner", "Intermediate", "Advanced"];
 const topics = ["Algebra", "Combinatorics", "Number Theory", "Geometry", "Inequalities", "Mathematical Logic"];
 
 const diffColors: Record<string, string> = {
   Beginner: "#10b981", Intermediate: "#f59e0b", Advanced: "#7c3aed", Elite: "#ef4444",
 };
+const tierColors: Record<Tier, string> = { Beginner: "#10b981", Intermediate: "#f59e0b", Advanced: "#7c3aed" };
 
 const blank = (): Omit<PuzzleItem, "id"> => ({
   date: new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }),
-  title: "", content: "", difficulty: "Intermediate", topic: "Number Theory",
+  title: "", content: "", difficulty: "Intermediate", tier: "Intermediate", topic: "Number Theory",
 });
 
 export default function AdminPuzzlesPage() {
@@ -41,7 +45,7 @@ export default function AdminPuzzlesPage() {
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const openCreate = () => { setForm(blank()); setEditId(null); setShowForm(true); };
-  const openEdit = (p: PuzzleItem) => { setForm({ date: p.date, title: p.title, content: p.content, difficulty: p.difficulty, topic: p.topic }); setEditId(p.id); setShowForm(true); };
+  const openEdit = (p: PuzzleItem) => { setForm({ date: p.date, title: p.title, content: p.content, difficulty: p.difficulty, tier: p.tier, topic: p.topic }); setEditId(p.id); setShowForm(true); };
 
   const save = () => {
     if (!form.title.trim() || !form.content.trim()) return;
@@ -99,12 +103,19 @@ export default function AdminPuzzlesPage() {
               className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all resize-none" />
           </div>
 
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className="grid sm:grid-cols-3 gap-4">
             <div className="space-y-1.5">
               <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Difficulty</label>
               <select value={form.difficulty} onChange={(e) => setForm({ ...form, difficulty: e.target.value as Difficulty })}
                 className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50 transition-all">
                 {difficulties.map((d) => <option key={d} value={d} className="bg-[#0f0f1a]">{d}</option>)}
+              </select>
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Tier</label>
+              <select value={form.tier} onChange={(e) => setForm({ ...form, tier: e.target.value as Tier })}
+                className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50 transition-all">
+                {tiers.map((t) => <option key={t} value={t} className="bg-[#0f0f1a]">{t}</option>)}
               </select>
             </div>
             <div className="space-y-1.5">
@@ -143,6 +154,9 @@ export default function AdminPuzzlesPage() {
           <div key={p.id} className="glass rounded-2xl p-5 flex items-start justify-between gap-4">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-3 mb-2 flex-wrap">
+                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full" style={{ backgroundColor: `${tierColors[p.tier]}18`, color: tierColors[p.tier] }}>
+                  {p.tier}
+                </span>
                 <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full" style={{ backgroundColor: `${diffColors[p.difficulty]}18`, color: diffColors[p.difficulty] }}>
                   {p.difficulty}
                 </span>

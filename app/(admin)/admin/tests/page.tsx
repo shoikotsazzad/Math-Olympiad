@@ -2,22 +2,24 @@
 
 import { useState } from "react";
 import { Plus, Trash2, Pencil, X, Check, ClipboardList, Search, Globe, Lock } from "lucide-react";
-import type { Test, Difficulty } from "@/types";
+import type { Test, Difficulty, Tier } from "@/types";
 
 const difficulties: Difficulty[] = ["Beginner", "Intermediate", "Advanced", "Elite"];
+const tiers: Tier[] = ["Beginner", "Intermediate", "Advanced"];
 const topicList = ["algebra", "combinatorics", "number-theory", "geometry", "inequalities", "mathematical-logic"];
 const diffColors: Record<string, string> = { Beginner: "#10b981", Intermediate: "#f59e0b", Advanced: "#7c3aed", Elite: "#ef4444" };
+const tierColors: Record<Tier, string> = { Beginner: "#10b981", Intermediate: "#f59e0b", Advanced: "#7c3aed" };
 
 const initialTests: Test[] = [
-  { id: "t1", title: "Number Theory Fundamentals", description: "Basic divisibility, primes, and modular arithmetic.", duration: 30, difficulty: "Beginner", topicId: "number-theory", questionCount: 10, isPublic: true, tags: ["primes", "divisibility"] },
-  { id: "t2", title: "Algebra Sprint", description: "Polynomials, factorization, and algebraic identities.", duration: 45, difficulty: "Intermediate", topicId: "algebra", questionCount: 15, isPublic: true, tags: ["polynomials", "factorization"] },
-  { id: "t3", title: "Combinatorics Challenge", description: "Counting principles, permutations, and combinations.", duration: 60, difficulty: "Advanced", topicId: "combinatorics", questionCount: 20, isPublic: false, tags: ["counting", "pigeonhole"] },
-  { id: "t4", title: "Geometry Elite", description: "Advanced Euclidean geometry and circle theorems.", duration: 90, difficulty: "Elite", topicId: "geometry", questionCount: 25, isPublic: false, source: "BdMO 2023", tags: ["circles", "triangles"] },
+  { id: "t1", title: "Number Theory Fundamentals", description: "Basic divisibility, primes, and modular arithmetic.", duration: 30, difficulty: "Beginner", tier: "Beginner", topicId: "number-theory", questionCount: 10, isPublic: true, tags: ["primes", "divisibility"] },
+  { id: "t2", title: "Algebra Sprint", description: "Polynomials, factorization, and algebraic identities.", duration: 45, difficulty: "Intermediate", tier: "Intermediate", topicId: "algebra", questionCount: 15, isPublic: true, tags: ["polynomials", "factorization"] },
+  { id: "t3", title: "Combinatorics Challenge", description: "Counting principles, permutations, and combinations.", duration: 60, difficulty: "Advanced", tier: "Intermediate", topicId: "combinatorics", questionCount: 20, isPublic: false, tags: ["counting", "pigeonhole"] },
+  { id: "t4", title: "Geometry Elite", description: "Advanced Euclidean geometry and circle theorems.", duration: 90, difficulty: "Elite", tier: "Advanced", topicId: "geometry", questionCount: 25, isPublic: false, source: "BdMO 2023", tags: ["circles", "triangles"] },
 ];
 
 type TestForm = Omit<Test, "id">;
 const blank = (): TestForm => ({
-  title: "", description: "", duration: 30, difficulty: "Intermediate",
+  title: "", description: "", duration: 30, difficulty: "Intermediate", tier: "Beginner",
   topicId: "number-theory", questionCount: 10, isPublic: true, source: "", tags: [],
 });
 
@@ -38,7 +40,7 @@ export default function AdminTestsPage() {
 
   const openCreate = () => { setForm(blank()); setTagInput(""); setEditId(null); setShowForm(true); };
   const openEdit = (t: Test) => {
-    setForm({ title: t.title, description: t.description, duration: t.duration, difficulty: t.difficulty, topicId: t.topicId, questionCount: t.questionCount, isPublic: t.isPublic, source: t.source ?? "", tags: [...t.tags] });
+    setForm({ title: t.title, description: t.description, duration: t.duration, difficulty: t.difficulty, tier: t.tier, topicId: t.topicId, questionCount: t.questionCount, isPublic: t.isPublic, source: t.source ?? "", tags: [...t.tags] });
     setTagInput(""); setEditId(t.id); setShowForm(true);
   };
 
@@ -127,7 +129,17 @@ export default function AdminTestsPage() {
             />
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
+            <div className="space-y-1.5">
+              <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Tier</label>
+              <select
+                value={form.tier}
+                onChange={(e) => setForm({ ...form, tier: e.target.value as Tier })}
+                className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-3 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50"
+              >
+                {tiers.map((t) => <option key={t} value={t} className="bg-[#0f0f1a]">{t}</option>)}
+              </select>
+            </div>
             <div className="space-y-1.5">
               <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Difficulty</label>
               <select
@@ -235,6 +247,7 @@ export default function AdminTestsPage() {
             <tr className="border-b border-white/[0.06] text-xs text-[#64748b] uppercase tracking-wider">
               <th className="text-left py-3 px-6 font-medium">Test</th>
               <th className="text-left py-3 px-6 font-medium hidden md:table-cell">Topic</th>
+              <th className="text-left py-3 px-6 font-medium hidden sm:table-cell">Tier</th>
               <th className="text-left py-3 px-6 font-medium hidden sm:table-cell">Difficulty</th>
               <th className="text-right py-3 px-6 font-medium hidden lg:table-cell">Duration</th>
               <th className="text-right py-3 px-6 font-medium hidden lg:table-cell">Questions</th>
@@ -258,6 +271,9 @@ export default function AdminTestsPage() {
                 </td>
                 <td className="py-3.5 px-6 hidden md:table-cell">
                   <span className="text-xs text-[#94a3b8]">{t.topicId.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}</span>
+                </td>
+                <td className="py-3.5 px-6 hidden sm:table-cell">
+                  <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: `${tierColors[t.tier]}15`, color: tierColors[t.tier] }}>{t.tier}</span>
                 </td>
                 <td className="py-3.5 px-6 hidden sm:table-cell">
                   <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: `${diffColors[t.difficulty]}18`, color: diffColors[t.difficulty] }}>{t.difficulty}</span>

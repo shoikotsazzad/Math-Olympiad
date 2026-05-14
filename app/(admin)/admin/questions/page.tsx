@@ -3,15 +3,17 @@
 import { useState } from "react";
 import { Plus, Trash2, Pencil, X, Check, FileText, Search } from "lucide-react";
 import { sampleQuestions } from "@/lib/mock/tests";
-import type { Question } from "@/types";
+import type { Question, Tier } from "@/types";
 
 type Difficulty = "Beginner" | "Intermediate" | "Advanced" | "Elite";
 const difficulties: Difficulty[] = ["Beginner", "Intermediate", "Advanced", "Elite"];
+const tiers: Tier[] = ["Beginner", "Intermediate", "Advanced"];
 const topicList = ["algebra", "combinatorics", "number-theory", "geometry", "inequalities", "mathematical-logic"];
 const diffColors: Record<string, string> = { Beginner: "#10b981", Intermediate: "#f59e0b", Advanced: "#7c3aed", Elite: "#ef4444" };
+const tierColors: Record<Tier, string> = { Beginner: "#10b981", Intermediate: "#f59e0b", Advanced: "#7c3aed" };
 
 const blankQ = (): Omit<Question, "id"> => ({
-  content: "", options: ["", "", "", ""], correctOption: 0, explanation: "", topicId: "number-theory", difficulty: "Intermediate",
+  content: "", options: ["", "", "", ""], correctOption: 0, explanation: "", topicId: "number-theory", difficulty: "Intermediate", tier: "Beginner",
 });
 
 export default function AdminQuestionsPage() {
@@ -28,7 +30,7 @@ export default function AdminQuestionsPage() {
 
   const openCreate = () => { setForm(blankQ()); setEditId(null); setShowForm(true); };
   const openEdit = (q: Question) => {
-    setForm({ content: q.content, options: [...q.options], correctOption: q.correctOption, explanation: q.explanation, topicId: q.topicId, difficulty: q.difficulty });
+    setForm({ content: q.content, options: [...q.options], correctOption: q.correctOption, explanation: q.explanation, topicId: q.topicId, difficulty: q.difficulty, tier: q.tier });
     setEditId(q.id); setShowForm(true);
   };
 
@@ -108,7 +110,7 @@ export default function AdminQuestionsPage() {
               className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all resize-none" />
           </div>
 
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className="grid sm:grid-cols-3 gap-4">
             <div className="space-y-1.5">
               <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Topic</label>
               <select value={form.topicId} onChange={(e) => setForm({ ...form, topicId: e.target.value })}
@@ -121,6 +123,13 @@ export default function AdminQuestionsPage() {
               <select value={form.difficulty} onChange={(e) => setForm({ ...form, difficulty: e.target.value as Difficulty })}
                 className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50">
                 {difficulties.map((d) => <option key={d} value={d} className="bg-[#0f0f1a]">{d}</option>)}
+              </select>
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Tier</label>
+              <select value={form.tier} onChange={(e) => setForm({ ...form, tier: e.target.value as Tier })}
+                className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50">
+                {tiers.map((t) => <option key={t} value={t} className="bg-[#0f0f1a]">{t}</option>)}
               </select>
             </div>
           </div>
@@ -168,9 +177,10 @@ export default function AdminQuestionsPage() {
                   <span className="text-xs text-[#94a3b8]">{q.topicId.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}</span>
                 </td>
                 <td className="py-3.5 px-6 hidden sm:table-cell">
-                  <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: `${diffColors[q.difficulty]}18`, color: diffColors[q.difficulty] }}>
-                    {q.difficulty}
-                  </span>
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: `${tierColors[q.tier]}15`, color: tierColors[q.tier] }}>{q.tier}</span>
+                    <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: `${diffColors[q.difficulty]}18`, color: diffColors[q.difficulty] }}>{q.difficulty}</span>
+                  </div>
                 </td>
                 <td className="py-3.5 px-6 hidden lg:table-cell">
                   <span className="text-xs text-[#10b981] font-medium">{q.options[q.correctOption]?.replace(/\$/g, "") || "—"}</span>

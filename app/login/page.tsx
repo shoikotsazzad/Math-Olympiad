@@ -3,11 +3,18 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Eye, EyeOff, Mail, Lock, User, AlertCircle } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, Building2, AlertCircle } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 import { useUsersStore } from "@/store/usersStore";
+import type { Tier } from "@/types";
 
 type Tab = "signin" | "signup";
+
+const TIERS: { value: Tier; label: string; subtitle: string; color: string; border: string; bg: string }[] = [
+  { value: "Beginner",     label: "Beginner",     subtitle: "School Level",           color: "#10b981", border: "border-[#10b981]/60", bg: "bg-[#10b981]/10" },
+  { value: "Intermediate", label: "Intermediate", subtitle: "College Level",          color: "#f59e0b", border: "border-[#f59e0b]/60", bg: "bg-[#f59e0b]/10" },
+  { value: "Advanced",     label: "Advanced",     subtitle: "University & Above",     color: "#7c3aed", border: "border-[#7c3aed]/60", bg: "bg-[#7c3aed]/10" },
+];
 
 export default function LoginPage() {
   const router = useRouter();
@@ -26,7 +33,8 @@ export default function LoginPage() {
   // Sign Up
   const [suName, setSuName] = useState("");
   const [suEmail, setSuEmail] = useState("");
-  const [suDept, setSuDept] = useState("CSE");
+  const [suInstitute, setSuInstitute] = useState("");
+  const [suTier, setSuTier] = useState<Tier>("Beginner");
   const [suPass, setSuPass] = useState("");
   const [suConfirm, setSuConfirm] = useState("");
   const [suShowPass, setSuShowPass] = useState(false);
@@ -50,6 +58,7 @@ export default function LoginPage() {
     e.preventDefault();
     setSuError("");
     if (!suName.trim()) return setSuError("Please enter your full name.");
+    if (!suInstitute.trim()) return setSuError("Please enter your school, college, or university name.");
     if (!suEmail.trim() || !suEmail.includes("@")) return setSuError("Enter a valid email address.");
     if (!suPass.trim() || suPass.length < 6) return setSuError("Password must be at least 6 characters.");
     if (suPass !== suConfirm) return setSuError("Passwords do not match.");
@@ -61,7 +70,9 @@ export default function LoginPage() {
       id: `u-${Date.now()}`,
       name: suName.trim(),
       email: suEmail.trim(),
-      dept: suDept,
+      dept: "",
+      institute: suInstitute.trim(),
+      tier: suTier,
       level: "Beginner",
       xp: 0,
       streak: 0,
@@ -70,7 +81,7 @@ export default function LoginPage() {
       joinedAt,
       status: "active",
     });
-    loginAsStudent(suEmail.trim(), suName.trim());
+    loginAsStudent(suEmail.trim(), suName.trim(), suTier, suInstitute.trim());
     router.push("/dashboard");
   };
 
@@ -186,6 +197,7 @@ export default function LoginPage() {
             {/* ── Sign Up ── */}
             {tab === "signup" && (
               <form onSubmit={handleSignUp} className="space-y-4">
+                {/* Name + Institute */}
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
                     <label className="text-xs font-medium text-[#94a3b8] uppercase tracking-wider">Full Name</label>
@@ -201,19 +213,51 @@ export default function LoginPage() {
                     </div>
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-xs font-medium text-[#94a3b8] uppercase tracking-wider">Department</label>
-                    <select
-                      value={suDept}
-                      onChange={(e) => setSuDept(e.target.value)}
-                      className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-3 py-3 text-sm text-white outline-none focus:border-[#7c3aed]/60 transition-all"
-                    >
-                      {["CSE", "EEE", "BBA", "Math", "Civil", "Other"].map((d) => (
-                        <option key={d} value={d} className="bg-[#0f0f1a]">{d}</option>
-                      ))}
-                    </select>
+                    <label className="text-xs font-medium text-[#94a3b8] uppercase tracking-wider">Institute</label>
+                    <div className="relative">
+                      <Building2 size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748b]" />
+                      <input
+                        type="text"
+                        value={suInstitute}
+                        onChange={(e) => setSuInstitute(e.target.value)}
+                        placeholder="School / College / University"
+                        className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/60 transition-all"
+                      />
+                    </div>
                   </div>
                 </div>
 
+                {/* Tier picker */}
+                <div className="space-y-2">
+                  <label className="text-xs font-medium text-[#94a3b8] uppercase tracking-wider">Your Level</label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {TIERS.map((t) => {
+                      const selected = suTier === t.value;
+                      return (
+                        <button
+                          key={t.value}
+                          type="button"
+                          onClick={() => setSuTier(t.value)}
+                          className={`p-3 rounded-xl border text-left transition-all ${
+                            selected
+                              ? `${t.border} ${t.bg}`
+                              : "border-white/[0.08] bg-white/[0.04] hover:border-white/[0.15]"
+                          }`}
+                        >
+                          <p
+                            className="font-semibold text-xs leading-tight"
+                            style={{ color: selected ? t.color : "#94a3b8" }}
+                          >
+                            {t.label}
+                          </p>
+                          <p className="text-[10px] text-[#64748b] mt-0.5 leading-tight">{t.subtitle}</p>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Email */}
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium text-[#94a3b8] uppercase tracking-wider">Email Address</label>
                   <div className="relative">
@@ -228,6 +272,7 @@ export default function LoginPage() {
                   </div>
                 </div>
 
+                {/* Password + Confirm */}
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
                     <label className="text-xs font-medium text-[#94a3b8] uppercase tracking-wider">Password</label>

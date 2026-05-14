@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { useEventsStore, type InternalEvent } from "@/store/eventsStore";
-import type { Event, OlympiadType } from "@/types";
+import type { Event, OlympiadType, LiveExam, Tier } from "@/types";
 import {
   Plus, Trash2, Pencil, X, Check, Search, Calendar,
-  MapPin, ExternalLink, Shield, Clock,
+  MapPin, ExternalLink, Shield, Clock, Radio,
 } from "lucide-react";
 
 const typeColors: Record<string, string> = {
@@ -14,11 +14,14 @@ const typeColors: Record<string, string> = {
 const internalTypeColors: Record<string, string> = {
   "MOCK SESSION": "#7c3aed", "DISCUSSION CLASS": "#0891b2", CHALLENGE: "#f59e0b",
 };
+const tierColors: Record<Tier, string> = { Beginner: "#10b981", Intermediate: "#f59e0b", Advanced: "#7c3aed" };
 const olympiadTypes: OlympiadType[] = ["IMO", "BdMO", "AMC", "INTERNAL"];
 const internalTypes = ["MOCK SESSION", "DISCUSSION CLASS", "CHALLENGE"];
 const internalColorOptions = ["violet", "blue", "gold", "green", "red"];
+const tiers: Tier[] = ["Beginner", "Intermediate", "Advanced"];
+const topicList = ["algebra", "combinatorics", "number-theory", "geometry", "inequalities", "mathematical-logic"];
 
-type Tab = "olympiad" | "internal";
+type Tab = "olympiad" | "internal" | "live-exam";
 
 const blankEvent = (): Omit<Event, "id"> => ({
   title: "", type: "BdMO", date: "", location: "", description: "",
@@ -29,11 +32,18 @@ const blankInternal = (): Omit<InternalEvent, "id"> => ({
   title: "", subtitle: "", date: "", time: "", type: "MOCK SESSION", typeColor: "violet",
 });
 
+const blankLiveExam = (): Omit<LiveExam, "id" | "createdAt"> => ({
+  title: "", description: "", tier: "Intermediate", scheduledAt: "",
+  duration: 60, topicId: "number-theory", testId: "", questionCount: 10,
+  status: "upcoming",
+});
+
 export default function AdminEventsPage() {
   const {
-    events, internalEvents,
+    events, internalEvents, liveExams,
     addEvent, updateEvent, removeEvent,
     addInternal, updateInternal, removeInternal,
+    addLiveExam, updateLiveExam, removeLiveExam,
   } = useEventsStore();
 
   const [tab, setTab] = useState<Tab>("olympiad");
@@ -42,13 +52,13 @@ export default function AdminEventsPage() {
   const [editId, setEditId] = useState<string | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  // Olympiad form
   const [evForm, setEvForm] = useState(blankEvent());
-  // Internal form
   const [intForm, setIntForm] = useState(blankInternal());
+  const [leForm, setLeForm] = useState(blankLiveExam());
 
   const openCreateOlympiad = () => { setEvForm(blankEvent()); setEditId(null); setShowForm(true); setTab("olympiad"); };
   const openCreateInternal = () => { setIntForm(blankInternal()); setEditId(null); setShowForm(true); setTab("internal"); };
+  const openCreateLiveExam = () => { setLeForm(blankLiveExam()); setEditId(null); setShowForm(true); setTab("live-exam"); };
 
   const openEditOlympiad = (e: Event) => {
     setEvForm({ title: e.title, type: e.type, date: e.date, location: e.location, description: e.description, isInternal: e.isInternal, officialLink: e.officialLink, registrationLink: e.registrationLink });
@@ -57,6 +67,13 @@ export default function AdminEventsPage() {
   const openEditInternal = (e: InternalEvent) => {
     setIntForm({ title: e.title, subtitle: e.subtitle, date: e.date, time: e.time, type: e.type, typeColor: e.typeColor });
     setEditId(e.id); setShowForm(true); setTab("internal");
+  };
+  const openEditLiveExam = (e: LiveExam) => {
+    const localDt = new Date(e.scheduledAt);
+    const pad = (n: number) => String(n).padStart(2, "0");
+    const localStr = `${localDt.getFullYear()}-${pad(localDt.getMonth() + 1)}-${pad(localDt.getDate())}T${pad(localDt.getHours())}:${pad(localDt.getMinutes())}`;
+    setLeForm({ title: e.title, description: e.description, tier: e.tier, scheduledAt: localStr, duration: e.duration, topicId: e.topicId, testId: e.testId ?? "", questionCount: e.questionCount, status: e.status });
+    setEditId(e.id); setShowForm(true); setTab("live-exam");
   };
 
   const saveOlympiad = () => {
@@ -71,16 +88,29 @@ export default function AdminEventsPage() {
     else { addInternal({ id: `int-${Date.now()}`, ...intForm }); }
     setShowForm(false);
   };
+  const saveLiveExam = () => {
+    if (!leForm.title.trim() || !leForm.scheduledAt) return;
+    const isoAt = new Date(leForm.scheduledAt).toISOString();
+    const payload = { ...leForm, scheduledAt: isoAt, createdAt: new Date().toISOString() };
+    if (editId) { updateLiveExam(editId, payload); }
+    else { addLiveExam({ id: `le-${Date.now()}`, ...payload }); }
+    setShowForm(false);
+  };
 
   const doDelete = () => {
     if (!deleteId) return;
     if (tab === "olympiad") removeEvent(deleteId);
-    else removeInternal(deleteId);
+    else if (tab === "internal") removeInternal(deleteId);
+    else removeLiveExam(deleteId);
     setDeleteId(null);
   };
 
   const filteredEvents = events.filter((e) => e.title.toLowerCase().includes(search.toLowerCase()));
   const filteredInternal = internalEvents.filter((e) => e.title.toLowerCase().includes(search.toLowerCase()));
+  const filteredLiveExams = liveExams.filter((e) => e.title.toLowerCase().includes(search.toLowerCase()));
+
+  const newLabel = tab === "olympiad" ? "New Event" : tab === "internal" ? "New Session" : "New Live Exam";
+  const onCreate = tab === "olympiad" ? openCreateOlympiad : tab === "internal" ? openCreateInternal : openCreateLiveExam;
 
   return (
     <div className="space-y-6">
@@ -90,20 +120,18 @@ export default function AdminEventsPage() {
           <h1 className="font-heading text-3xl font-bold text-white flex items-center gap-2">
             <Shield size={24} className="text-[#a78bfa]" /> Events Management
           </h1>
-          <p className="text-[#94a3b8] text-sm mt-1">Create, edit and manage olympiad events and internal sessions.</p>
+          <p className="text-[#94a3b8] text-sm mt-1">Create, edit and manage olympiad events, internal sessions, and live exams.</p>
         </div>
-        <button
-          onClick={tab === "olympiad" ? openCreateOlympiad : openCreateInternal}
-          className="flex items-center gap-2 gradient-violet glow-violet text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:scale-105 transition-all"
-        >
-          <Plus size={16} /> New {tab === "olympiad" ? "Event" : "Session"}
+        <button onClick={onCreate}
+          className="flex items-center gap-2 gradient-violet glow-violet text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:scale-105 transition-all">
+          <Plus size={16} /> {newLabel}
         </button>
       </div>
 
       {/* Tabs & Search */}
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex gap-2">
-          {([["olympiad", "Olympiad Events"], ["internal", "Internal Sessions"]] as [Tab, string][]).map(([t, label]) => (
+          {([["olympiad", "Olympiad Events"], ["internal", "Internal Sessions"], ["live-exam", "Live Exams"]] as [Tab, string][]).map(([t, label]) => (
             <button key={t} onClick={() => { setTab(t); setShowForm(false); }}
               className={`px-4 py-2 rounded-full text-xs font-medium transition-all ${tab === t ? "gradient-violet text-white" : "bg-white/[0.06] text-[#94a3b8] hover:text-white hover:bg-white/[0.1]"}`}>
               {label}
@@ -122,12 +150,12 @@ export default function AdminEventsPage() {
         <div className="glass rounded-2xl p-6 border border-[#7c3aed]/30 space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="font-heading font-semibold text-white">
-              {editId ? "Edit" : "New"} {tab === "olympiad" ? "Olympiad Event" : "Internal Session"}
+              {editId ? "Edit" : "New"} {tab === "olympiad" ? "Olympiad Event" : tab === "internal" ? "Internal Session" : "Live Exam"}
             </h3>
             <button onClick={() => setShowForm(false)} className="text-[#64748b] hover:text-white"><X size={18} /></button>
           </div>
 
-          {tab === "olympiad" ? (
+          {tab === "olympiad" && (
             <>
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
@@ -179,7 +207,9 @@ export default function AdminEventsPage() {
                 </div>
               </div>
             </>
-          ) : (
+          )}
+
+          {tab === "internal" && (
             <>
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
@@ -226,10 +256,70 @@ export default function AdminEventsPage() {
             </>
           )}
 
+          {tab === "live-exam" && (
+            <>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Title *</label>
+                  <input value={leForm.title} onChange={(e) => setLeForm({ ...leForm, title: e.target.value })}
+                    placeholder="e.g. Monthly Olympiad — May"
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all" />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Tier</label>
+                  <select value={leForm.tier} onChange={(e) => setLeForm({ ...leForm, tier: e.target.value as Tier })}
+                    className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50">
+                    {tiers.map((t) => <option key={t} value={t} className="bg-[#0f0f1a]">{t}</option>)}
+                  </select>
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Description</label>
+                <textarea value={leForm.description} onChange={(e) => setLeForm({ ...leForm, description: e.target.value })}
+                  rows={2} placeholder="Brief description..."
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all resize-none" />
+              </div>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="space-y-1.5 lg:col-span-2">
+                  <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Scheduled At *</label>
+                  <input type="datetime-local" value={leForm.scheduledAt} onChange={(e) => setLeForm({ ...leForm, scheduledAt: e.target.value })}
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50 transition-all [color-scheme:dark]" />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Duration (min)</label>
+                  <input type="number" min={10} value={leForm.duration} onChange={(e) => setLeForm({ ...leForm, duration: Number(e.target.value) })}
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50 transition-all" />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Questions</label>
+                  <input type="number" min={1} value={leForm.questionCount} onChange={(e) => setLeForm({ ...leForm, questionCount: Number(e.target.value) })}
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50 transition-all" />
+                </div>
+              </div>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Topic</label>
+                  <select value={leForm.topicId} onChange={(e) => setLeForm({ ...leForm, topicId: e.target.value })}
+                    className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50">
+                    {topicList.map((t) => <option key={t} value={t} className="bg-[#0f0f1a]">{t.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}</option>)}
+                  </select>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Status</label>
+                  <select value={leForm.status} onChange={(e) => setLeForm({ ...leForm, status: e.target.value as LiveExam["status"] })}
+                    className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50">
+                    {(["upcoming", "live", "ended"] as LiveExam["status"][]).map((s) => <option key={s} value={s} className="bg-[#0f0f1a]">{s}</option>)}
+                  </select>
+                </div>
+              </div>
+            </>
+          )}
+
           <div className="flex gap-3 justify-end">
             <button onClick={() => setShowForm(false)} className="px-5 py-2 rounded-xl text-sm text-[#94a3b8] hover:text-white transition-colors">Cancel</button>
-            <button onClick={tab === "olympiad" ? saveOlympiad : saveInternal}
-              disabled={tab === "olympiad" ? !evForm.title.trim() : !intForm.title.trim()}
+            <button
+              onClick={tab === "olympiad" ? saveOlympiad : tab === "internal" ? saveInternal : saveLiveExam}
+              disabled={tab === "olympiad" ? !evForm.title.trim() : tab === "internal" ? !intForm.title.trim() : (!leForm.title.trim() || !leForm.scheduledAt)}
               className="flex items-center gap-2 gradient-violet text-white text-sm font-semibold px-5 py-2 rounded-xl hover:scale-105 transition-all disabled:opacity-50 disabled:scale-100">
               <Check size={15} /> {editId ? "Save Changes" : "Create"}
             </button>
@@ -310,6 +400,44 @@ export default function AdminEventsPage() {
           })}
           {filteredInternal.length === 0 && <p className="text-center text-[#64748b] text-sm py-10">No internal sessions found.</p>}
           <p className="text-xs text-[#475569] text-center">{filteredInternal.length} of {internalEvents.length} sessions</p>
+        </div>
+      )}
+
+      {/* Live Exams List */}
+      {tab === "live-exam" && (
+        <div className="space-y-3">
+          {filteredLiveExams.map((ex) => {
+            const tc = tierColors[ex.tier];
+            const statusColor = ex.status === "live" ? "#10b981" : ex.status === "upcoming" ? "#7c3aed" : "#475569";
+            const dt = new Date(ex.scheduledAt);
+            return (
+              <div key={ex.id} className="glass rounded-2xl p-5 flex items-start justify-between gap-4">
+                <div className="flex-1 min-w-0 space-y-2">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1" style={{ backgroundColor: `${tc}18`, color: tc }}>
+                      <Radio size={10} /> {ex.tier}
+                    </span>
+                    <span className="text-xs font-medium px-2 py-0.5 rounded-full capitalize" style={{ backgroundColor: `${statusColor}18`, color: statusColor }}>
+                      {ex.status}
+                    </span>
+                  </div>
+                  <p className="font-heading font-semibold text-white text-sm">{ex.title}</p>
+                  <p className="text-xs text-[#64748b] line-clamp-1">{ex.description}</p>
+                  <div className="flex flex-wrap gap-3 text-xs text-[#94a3b8]">
+                    <span className="flex items-center gap-1.5"><Calendar size={11} /> {dt.toLocaleString()}</span>
+                    <span className="flex items-center gap-1.5"><Clock size={11} /> {ex.duration} min</span>
+                    <span>{ex.questionCount} questions · {ex.topicId.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <button onClick={() => openEditLiveExam(ex)} className="p-2 rounded-lg text-[#64748b] hover:text-[#a78bfa] hover:bg-[#7c3aed]/10 transition-colors"><Pencil size={15} /></button>
+                  <button onClick={() => { setDeleteId(ex.id); setTab("live-exam"); }} className="p-2 rounded-lg text-[#64748b] hover:text-red-400 hover:bg-red-500/10 transition-colors"><Trash2 size={15} /></button>
+                </div>
+              </div>
+            );
+          })}
+          {filteredLiveExams.length === 0 && <p className="text-center text-[#64748b] text-sm py-10">No live exams found.</p>}
+          <p className="text-xs text-[#475569] text-center">{filteredLiveExams.length} of {liveExams.length} live exams</p>
         </div>
       )}
     </div>

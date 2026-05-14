@@ -3,16 +3,18 @@
 import { useState } from "react";
 import { Plus, Trash2, Pencil, X, Check, BookOpen } from "lucide-react";
 import { topics as initialTopics } from "@/lib/mock/topics";
-import type { Topic } from "@/types";
+import type { Topic, Tier } from "@/types";
 
 type Difficulty = "Beginner" | "Intermediate" | "Advanced" | "Elite";
 const difficulties: Difficulty[] = ["Beginner", "Intermediate", "Advanced", "Elite"];
+const tiers: Tier[] = ["Beginner", "Intermediate", "Advanced"];
 const colorOptions = ["#7c3aed", "#4f46e5", "#0891b2", "#059669", "#d97706", "#be185d", "#ef4444", "#3b82f6"];
 const diffColors: Record<string, string> = { Beginner: "#10b981", Intermediate: "#f59e0b", Advanced: "#7c3aed", Elite: "#ef4444" };
+const tierColors: Record<Tier, string> = { Beginner: "#10b981", Intermediate: "#f59e0b", Advanced: "#7c3aed" };
 
 type TopicForm = Omit<Topic, "id">;
 const blank = (): TopicForm => ({
-  slug: "", name: "", description: "", level: "Intermediate", lessonCount: 0, problemCount: 0, color: "#7c3aed",
+  slug: "", name: "", description: "", tier: "Beginner", level: "Intermediate", lessonCount: 0, problemCount: 0, color: "#7c3aed",
 });
 
 export default function AdminTopicsPage() {
@@ -24,7 +26,7 @@ export default function AdminTopicsPage() {
 
   const openCreate = () => { setForm(blank()); setEditId(null); setShowForm(true); };
   const openEdit = (t: Topic) => {
-    setForm({ slug: t.slug, name: t.name, description: t.description, level: t.level, lessonCount: t.lessonCount, problemCount: t.problemCount, color: t.color });
+    setForm({ slug: t.slug, name: t.name, description: t.description, tier: t.tier, level: t.level, lessonCount: t.lessonCount, problemCount: t.problemCount, color: t.color });
     setEditId(t.id); setShowForm(true);
   };
 
@@ -85,7 +87,14 @@ export default function AdminTopicsPage() {
               className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all resize-none" />
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
+            <div className="space-y-1.5">
+              <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Tier</label>
+              <select value={form.tier} onChange={(e) => setForm({ ...form, tier: e.target.value as Tier })}
+                className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-3 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50">
+                {tiers.map((t) => <option key={t} value={t} className="bg-[#0f0f1a]">{t}</option>)}
+              </select>
+            </div>
             <div className="space-y-1.5">
               <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Difficulty</label>
               <select value={form.level} onChange={(e) => setForm({ ...form, level: e.target.value as Difficulty })}
@@ -147,6 +156,7 @@ export default function AdminTopicsPage() {
               <div>
                 <div className="flex items-center gap-2 mb-1 flex-wrap">
                   <p className="font-heading font-semibold text-white">{t.name}</p>
+                  <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: `${tierColors[t.tier]}15`, color: tierColors[t.tier] }}>{t.tier}</span>
                   <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: `${diffColors[t.level]}18`, color: diffColors[t.level] }}>{t.level}</span>
                 </div>
                 <p className="text-xs text-[#64748b] leading-relaxed line-clamp-2">{t.description}</p>

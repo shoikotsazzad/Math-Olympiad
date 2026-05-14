@@ -1,24 +1,46 @@
 "use client";
 
 import { useState } from "react";
-import { todaysPuzzle } from "@/lib/mock/puzzle";
+import { puzzlesByTier } from "@/lib/mock/puzzle";
 import { Flame, Clock, ChevronRight } from "lucide-react";
+import { useAuthStore } from "@/store/authStore";
+import type { Tier } from "@/types";
+
+const tierColors: Record<Tier, string> = {
+  Beginner: "#10b981",
+  Intermediate: "#f59e0b",
+  Advanced: "#7c3aed",
+};
 
 export default function DailyPuzzlePage() {
-  const puzzle = todaysPuzzle;
+  const { user } = useAuthStore();
+  const userTier = user?.tier ?? "Beginner";
+  const puzzle = puzzlesByTier[userTier];
   const [answer, setAnswer] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <h1 className="font-heading text-3xl font-bold text-white">Problem of the Day</h1>
           <p className="text-[#94a3b8] text-sm mt-1">{puzzle.date}</p>
         </div>
-        <div className="flex items-center gap-2 bg-[#f59e0b]/20 border border-[#f59e0b]/30 px-4 py-2 rounded-full">
-          <Flame size={16} className="text-[#f59e0b]" />
-          <span className="text-[#f59e0b] font-bold text-sm">{puzzle.streakCount} Days</span>
+        <div className="flex items-center gap-2">
+          <span
+            className="text-xs font-semibold px-3 py-1.5 rounded-full border"
+            style={{
+              color: tierColors[puzzle.tier],
+              backgroundColor: `${tierColors[puzzle.tier]}15`,
+              borderColor: `${tierColors[puzzle.tier]}40`,
+            }}
+          >
+            {puzzle.tier}
+          </span>
+          <div className="flex items-center gap-2 bg-[#f59e0b]/20 border border-[#f59e0b]/30 px-4 py-2 rounded-full">
+            <Flame size={16} className="text-[#f59e0b]" />
+            <span className="text-[#f59e0b] font-bold text-sm">{puzzle.streakCount} Days</span>
+          </div>
         </div>
       </div>
 
@@ -88,7 +110,7 @@ export default function DailyPuzzlePage() {
                     <p className="text-xs text-[#94a3b8]">{p.topic} • {p.date}</p>
                   </div>
                   <button className="text-xs text-[#7c3aed] hover:text-[#a78bfa] transition-colors">
-                    Start Daily Challenge
+                    Attempt
                   </button>
                 </div>
               ))}
@@ -100,7 +122,7 @@ export default function DailyPuzzlePage() {
         <div className="space-y-4">
           {/* Streak tracker */}
           <div className="glass rounded-2xl p-5">
-            <h3 className="font-heading font-semibold text-white mb-3">Stream Status</h3>
+            <h3 className="font-heading font-semibold text-white mb-3">Streak Status</h3>
             <p className="text-3xl font-heading font-bold text-white">{puzzle.streakCount} Days</p>
             <div className="flex gap-1.5 mt-3">
               {Array.from({ length: 7 }).map((_, i) => (

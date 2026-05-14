@@ -47,7 +47,7 @@ export default async function TopicDetailPage({
             className="text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider"
             style={{ backgroundColor: `${topic.color}20`, color: topic.color }}
           >
-            Foundation Tier • {modules.length * 4} Modules • {topic.lessonCount * 4} Lessons
+            {topic.tier} • {modules.length * 4} Modules • {topic.lessonCount * 4} Lessons
           </span>
           <h1 className="font-heading text-5xl font-extrabold text-white mt-4 italic">
             {topic.name}

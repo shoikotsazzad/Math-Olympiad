@@ -2,18 +2,20 @@ export type UserRole = "STUDENT" | "ADMIN" | "FACULTY";
 export type Difficulty = "Beginner" | "Intermediate" | "Advanced" | "Elite";
 export type OlympiadType = "BdMO" | "AMC" | "IMO" | "INTERNAL";
 export type QuestionState = "unanswered" | "answered" | "marked" | "skipped";
+export type Tier = "Beginner" | "Intermediate" | "Advanced";
 
 export interface User {
   id: string;
   name: string;
   email: string;
   role: UserRole;
-  department: string;
+  tier: Tier;
+  institute: string;
+  department?: string;
   xp: number;
   streak: number;
   level: string;
   avatar?: string;
-  // Extended profile fields
   gender?: string;
   dob?: string;
   phone?: string;
@@ -28,6 +30,7 @@ export interface Topic {
   name: string;
   description: string;
   imageUrl?: string;
+  tier: Tier;
   level: Difficulty;
   lessonCount: number;
   problemCount: number;
@@ -52,6 +55,7 @@ export interface Question {
   explanation: string;
   topicId: string;
   difficulty: Difficulty;
+  tier: Tier;
 }
 
 export interface Test {
@@ -60,6 +64,7 @@ export interface Test {
   description: string;
   duration: number;
   difficulty: Difficulty;
+  tier: Tier;
   topicId: string;
   questionCount: number;
   isPublic: boolean;
@@ -85,10 +90,40 @@ export interface DailyPuzzle {
   date: string;
   content: string;
   difficulty: Difficulty;
+  tier: Tier;
   topic: string;
   streakCount: number;
   topSolvers: { name: string; time: string; avatar?: string }[];
   previousPuzzles: { id: string; title: string; topic: string; date: string }[];
+}
+
+export interface CommunityPost {
+  id: number;
+  title: string;
+  category: string;
+  author: string;
+  authorInstitute: string;
+  tier: Tier;
+  time: string;
+  views: number;
+  likes: number;
+  replies: number;
+  pinned: boolean;
+  tags: string[];
+}
+
+export interface LiveExam {
+  id: string;
+  title: string;
+  description: string;
+  tier: Tier;
+  scheduledAt: string;
+  duration: number;
+  topicId: string;
+  testId?: string;
+  questionCount: number;
+  status: "upcoming" | "live" | "ended";
+  createdAt: string;
 }
 
 export interface Event {
@@ -108,6 +143,8 @@ export interface LeaderboardEntry {
   rank: number;
   name: string;
   department: string;
+  institute: string;
+  tier: Tier;
   rating: number;
   trend: "up" | "down" | "stable";
   avatar?: string;

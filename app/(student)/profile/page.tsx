@@ -1,12 +1,26 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { User, Mail, Phone, MapPin, Calendar, BookOpen, Edit3, Check, X, GraduationCap, FileText } from "lucide-react";
+import { User, Mail, Phone, MapPin, Calendar, BookOpen, Edit3, Check, X, GraduationCap, FileText, Building2 } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 import { useUsersStore } from "@/store/usersStore";
+import type { Tier } from "@/types";
 
 const genderOptions = ["Prefer not to say", "Male", "Female", "Non-binary", "Other"];
 const deptOptions = ["CSE", "EEE", "BBA", "Math", "Civil", "Other"];
+const TIERS: Tier[] = ["Beginner", "Intermediate", "Advanced"];
+
+const tierColors: Record<Tier, string> = {
+  Beginner: "#10b981",
+  Intermediate: "#f59e0b",
+  Advanced: "#7c3aed",
+};
+
+const tierSubtitles: Record<Tier, string> = {
+  Beginner: "School Level",
+  Intermediate: "College Level",
+  Advanced: "University & Above",
+};
 
 export default function ProfilePage() {
   const { user, updateProfile } = useAuthStore();
@@ -20,8 +34,10 @@ export default function ProfilePage() {
   const [dob, setDob] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
-  const [university, setUniversity] = useState("United International University");
+  const [institute, setInstitute] = useState("");
+  const [university, setUniversity] = useState("");
   const [dept, setDept] = useState("");
+  const [tier, setTier] = useState<Tier>("Beginner");
   const [about, setAbout] = useState("");
 
   useEffect(() => {
@@ -31,18 +47,21 @@ export default function ProfilePage() {
       setDob(user.dob ?? "");
       setPhone(user.phone ?? "");
       setAddress(user.address ?? "");
-      setUniversity(user.university ?? "United International University");
+      setInstitute(user.institute ?? "");
+      setUniversity(user.university ?? "");
       setDept(user.department ?? "");
+      setTier(user.tier ?? "Beginner");
       setAbout(user.about ?? "");
     }
   }, [user]);
 
   if (!user) return null;
 
+  const userTier = user.tier ?? "Beginner";
+
   const handleSave = () => {
-    updateProfile({ name, gender, dob, phone, address, university, department: dept, about });
-    // Sync name + dept back to the admin users list
-    updateUser(user.id, { name, dept });
+    updateProfile({ name, gender, dob, phone, address, institute, university, department: dept, tier, about });
+    updateUser(user.id, { name, dept, institute, tier });
     setEditing(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
@@ -54,8 +73,10 @@ export default function ProfilePage() {
     setDob(user.dob ?? "");
     setPhone(user.phone ?? "");
     setAddress(user.address ?? "");
-    setUniversity(user.university ?? "United International University");
+    setInstitute(user.institute ?? "");
+    setUniversity(user.university ?? "");
     setDept(user.department ?? "");
+    setTier(user.tier ?? "Beginner");
     setAbout(user.about ?? "");
     setEditing(false);
   };
@@ -114,6 +135,7 @@ export default function ProfilePage() {
           <p className="text-sm text-[#64748b] mt-0.5">{user.email}</p>
           <div className="flex flex-wrap gap-3 mt-3">
             {[
+              { label: "Tier", value: userTier, color: tierColors[userTier] },
               { label: "Level", value: user.level, color: "#a78bfa" },
               { label: "XP", value: user.xp.toLocaleString(), color: "#f59e0b" },
               { label: "Streak", value: `${user.streak}d`, color: "#10b981" },
@@ -124,16 +146,20 @@ export default function ProfilePage() {
               </div>
             ))}
           </div>
+          {user.institute && (
+            <p className="text-xs text-[#64748b] mt-2 flex items-center gap-1">
+              <Building2 size={11} /> {user.institute}
+            </p>
+          )}
         </div>
       </div>
 
-      {/* Profile fields */}
+      {/* Personal Info */}
       <div className="glass rounded-2xl p-6 space-y-5">
         <h3 className="font-heading font-semibold text-white text-sm uppercase tracking-wider text-[#94a3b8]">
           Personal Information
         </h3>
 
-        {/* Name + Gender */}
         <div className="grid sm:grid-cols-2 gap-4">
           <div className="space-y-1.5">
             <label className="text-xs text-[#64748b] flex items-center gap-1.5"><User size={11} /> Full Name</label>
@@ -155,7 +181,6 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* DOB + Phone */}
         <div className="grid sm:grid-cols-2 gap-4">
           <div className="space-y-1.5">
             <label className="text-xs text-[#64748b] flex items-center gap-1.5"><Calendar size={11} /> Date of Birth</label>
@@ -175,13 +200,11 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Email (readonly) */}
         <div className="space-y-1.5">
           <label className="text-xs text-[#64748b] flex items-center gap-1.5"><Mail size={11} /> Email Address</label>
           <p className="text-sm text-[#64748b] py-1">{user.email}</p>
         </div>
 
-        {/* Address */}
         <div className="space-y-1.5">
           <label className="text-xs text-[#64748b] flex items-center gap-1.5"><MapPin size={11} /> Address</label>
           {editing ? (
@@ -198,13 +221,68 @@ export default function ProfilePage() {
           Academic Information
         </h3>
 
+        {/* Institute */}
+        <div className="space-y-1.5">
+          <label className="text-xs text-[#64748b] flex items-center gap-1.5"><Building2 size={11} /> Institute Name</label>
+          {editing ? (
+            <input value={institute} onChange={(e) => setInstitute(e.target.value)} placeholder="School / College / University" className={fieldCls} />
+          ) : (
+            <p className={readCls}>{user.institute || <span className="text-[#475569]">Not set</span>}</p>
+          )}
+        </div>
+
+        {/* Competition Tier */}
+        <div className="space-y-2">
+          <label className="text-xs text-[#64748b]">Competition Tier</label>
+          {editing ? (
+            <div className="grid grid-cols-3 gap-2">
+              {TIERS.map((t) => {
+                const selected = tier === t;
+                return (
+                  <button
+                    key={t}
+                    type="button"
+                    onClick={() => setTier(t)}
+                    className={`p-3 rounded-xl border text-left transition-all ${
+                      selected
+                        ? "border-opacity-60"
+                        : "border-white/[0.08] bg-white/[0.04] hover:border-white/[0.15]"
+                    }`}
+                    style={selected ? {
+                      borderColor: `${tierColors[t]}60`,
+                      backgroundColor: `${tierColors[t]}15`,
+                    } : {}}
+                  >
+                    <p className="font-semibold text-xs" style={{ color: selected ? tierColors[t] : "#94a3b8" }}>{t}</p>
+                    <p className="text-[10px] text-[#64748b] mt-0.5">{tierSubtitles[t]}</p>
+                  </button>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <span
+                className="text-sm font-semibold px-3 py-1 rounded-full border"
+                style={{
+                  color: tierColors[userTier],
+                  backgroundColor: `${tierColors[userTier]}15`,
+                  borderColor: `${tierColors[userTier]}40`,
+                }}
+              >
+                {userTier}
+              </span>
+              <span className="text-xs text-[#64748b]">{tierSubtitles[userTier]}</span>
+            </div>
+          )}
+        </div>
+
         <div className="grid sm:grid-cols-2 gap-4">
           <div className="space-y-1.5">
-            <label className="text-xs text-[#64748b] flex items-center gap-1.5"><GraduationCap size={11} /> University</label>
+            <label className="text-xs text-[#64748b] flex items-center gap-1.5"><GraduationCap size={11} /> University / College</label>
             {editing ? (
-              <input value={university} onChange={(e) => setUniversity(e.target.value)} placeholder="University name" className={fieldCls} />
+              <input value={university} onChange={(e) => setUniversity(e.target.value)} placeholder="University / College name" className={fieldCls} />
             ) : (
-              <p className={readCls}>{user.university || "United International University"}</p>
+              <p className={readCls}>{user.university || <span className="text-[#475569]">Not set</span>}</p>
             )}
           </div>
           <div className="space-y-1.5">
@@ -219,7 +297,6 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* About */}
         <div className="space-y-1.5">
           <label className="text-xs text-[#64748b] flex items-center gap-1.5"><FileText size={11} /> About Me</label>
           {editing ? (

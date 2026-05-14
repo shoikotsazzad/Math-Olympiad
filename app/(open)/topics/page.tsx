@@ -1,6 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import { topics } from "@/lib/mock/topics";
 import { BookOpen, ArrowRight, Lock } from "lucide-react";
+import { useAuthStore } from "@/store/authStore";
+import type { Tier } from "@/types";
 
 const difficultyColors: Record<string, string> = {
   Beginner: "#10b981",
@@ -9,7 +13,16 @@ const difficultyColors: Record<string, string> = {
   Elite: "#ef4444",
 };
 
+const tierColors: Record<Tier, string> = {
+  Beginner: "#10b981",
+  Intermediate: "#f59e0b",
+  Advanced: "#7c3aed",
+};
+
 export default function TopicsPage() {
+  const { user } = useAuthStore();
+  const filteredTopics = user ? topics.filter((t) => t.tier === user.tier) : topics;
+
   return (
     <div className="space-y-8">
       {/* Hero */}
@@ -28,12 +41,27 @@ export default function TopicsPage() {
             Explore the core pillars of competitive mathematics. Our curated syllabus is designed to
             take you from fundamental principles to world-class problem-solving techniques.
           </p>
+          {user && (
+            <div className="mt-4 flex items-center gap-2">
+              <span
+                className="text-xs font-semibold px-3 py-1 rounded-full border"
+                style={{
+                  color: tierColors[user.tier],
+                  backgroundColor: `${tierColors[user.tier]}15`,
+                  borderColor: `${tierColors[user.tier]}40`,
+                }}
+              >
+                {user.tier} Topics
+              </span>
+              <span className="text-xs text-[#64748b]">Showing content for your level</span>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Topic grid */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {topics.map((topic) => (
+        {filteredTopics.map((topic) => (
           <Link
             key={topic.id}
             href={`/topics/${topic.slug}`}
@@ -72,6 +100,12 @@ export default function TopicsPage() {
             </div>
           </Link>
         ))}
+
+        {filteredTopics.length === 0 && (
+          <div className="col-span-full glass rounded-2xl p-10 text-center">
+            <p className="text-[#94a3b8] text-sm">No topics found for your tier.</p>
+          </div>
+        )}
       </div>
 
       {/* CTA */}

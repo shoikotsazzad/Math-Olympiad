@@ -3,25 +3,27 @@
 import { useState } from "react";
 import { useUsersStore } from "@/store/usersStore";
 import type { AdminUser } from "@/lib/mock/users";
+import type { Tier } from "@/types";
 import { Search, Trash2, Eye, Users, UserX } from "lucide-react";
 
 const levelColors: Record<string, string> = {
   Grandmaster: "#f59e0b", "Prime Master": "#7c3aed", Expert: "#10b981",
   Advanced: "#3b82f6", Intermediate: "#0891b2", Beginner: "#64748b",
 };
+const tierColors: Record<Tier, string> = { Beginner: "#10b981", Intermediate: "#f59e0b", Advanced: "#7c3aed" };
+const tiers: Tier[] = ["Beginner", "Intermediate", "Advanced"];
 
 export default function AdminStudentsPage() {
   const { users, removeUser } = useUsersStore();
   const [search, setSearch] = useState("");
-  const [filterDept, setFilterDept] = useState("All");
+  const [filterTier, setFilterTier] = useState<Tier | "All">("All");
   const [viewUser, setViewUser] = useState<AdminUser | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  const depts = ["All", ...Array.from(new Set(users.map((u) => u.dept)))];
   const filtered = users.filter((u) => {
     const matchSearch = u.name.toLowerCase().includes(search.toLowerCase()) || u.email.toLowerCase().includes(search.toLowerCase());
-    const matchDept = filterDept === "All" || u.dept === filterDept;
-    return matchSearch && matchDept;
+    const matchTier = filterTier === "All" || u.tier === filterTier;
+    return matchSearch && matchTier;
   });
 
   const doDelete = () => {
@@ -47,10 +49,15 @@ export default function AdminStudentsPage() {
             className="bg-white/[0.06] border border-white/[0.08] rounded-xl pl-9 pr-4 py-2 text-sm text-[#94a3b8] placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 w-60 transition-all" />
         </div>
         <div className="flex flex-wrap gap-2">
-          {depts.map((d) => (
-            <button key={d} onClick={() => setFilterDept(d)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${filterDept === d ? "gradient-violet text-white" : "bg-white/[0.06] text-[#94a3b8] hover:text-white"}`}>
-              {d}
+          <button onClick={() => setFilterTier("All")}
+            className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${filterTier === "All" ? "gradient-violet text-white" : "bg-white/[0.06] text-[#94a3b8] hover:text-white"}`}>
+            All Tiers
+          </button>
+          {tiers.map((t) => (
+            <button key={t} onClick={() => setFilterTier(t)}
+              className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${filterTier === t ? "text-white" : "bg-white/[0.06] text-[#94a3b8] hover:text-white"}`}
+              style={filterTier === t ? { backgroundColor: tierColors[t] } : {}}>
+              {t}
             </button>
           ))}
         </div>
@@ -68,18 +75,22 @@ export default function AdminStudentsPage() {
             <div>
               <p className="font-heading font-semibold text-white text-lg">{viewUser.name}</p>
               <p className="text-sm text-[#64748b]">{viewUser.email}</p>
+              <div className="flex items-center gap-2 mt-1">
+                <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: `${tierColors[viewUser.tier]}18`, color: tierColors[viewUser.tier] }}>{viewUser.tier}</span>
+                <span className="text-xs text-[#64748b]">{viewUser.institute}</span>
+              </div>
             </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {[
               { label: "Department", value: viewUser.dept },
+              { label: "Institute", value: viewUser.institute },
               { label: "Level", value: viewUser.level },
               { label: "XP", value: viewUser.xp.toLocaleString() },
               { label: "Streak", value: `${viewUser.streak} days` },
               { label: "Tests Taken", value: viewUser.testsTaken },
               { label: "Avg. Score", value: `${viewUser.avgScore}%` },
               { label: "Joined", value: viewUser.joinedAt },
-              { label: "Status", value: viewUser.status },
             ].map(({ label, value }) => (
               <div key={label} className="bg-white/[0.04] rounded-xl p-3">
                 <p className="text-xs text-[#64748b] mb-1">{label}</p>
@@ -111,13 +122,13 @@ export default function AdminStudentsPage() {
             <thead>
               <tr className="border-b border-white/[0.06] text-xs text-[#64748b] uppercase tracking-wider">
                 <th className="text-left py-3 px-6 font-medium">Student</th>
-                <th className="text-left py-3 px-6 font-medium hidden md:table-cell">Dept</th>
+                <th className="text-left py-3 px-6 font-medium hidden md:table-cell">Tier</th>
+                <th className="text-left py-3 px-6 font-medium hidden lg:table-cell">Institute</th>
                 <th className="text-left py-3 px-6 font-medium hidden lg:table-cell">Level</th>
                 <th className="text-right py-3 px-6 font-medium hidden sm:table-cell">XP</th>
                 <th className="text-right py-3 px-6 font-medium hidden md:table-cell">Streak</th>
                 <th className="text-right py-3 px-6 font-medium">Score</th>
                 <th className="text-center py-3 px-6 font-medium hidden sm:table-cell">Status</th>
-                <th className="text-center py-3 px-6 font-medium hidden lg:table-cell">Joined</th>
                 <th className="text-right py-3 px-6 font-medium">Actions</th>
               </tr>
             </thead>
@@ -133,7 +144,10 @@ export default function AdminStudentsPage() {
                       </div>
                     </div>
                   </td>
-                  <td className="py-3.5 px-6 hidden md:table-cell"><span className="text-sm text-[#94a3b8]">{u.dept}</span></td>
+                  <td className="py-3.5 px-6 hidden md:table-cell">
+                    <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: `${tierColors[u.tier]}18`, color: tierColors[u.tier] }}>{u.tier}</span>
+                  </td>
+                  <td className="py-3.5 px-6 hidden lg:table-cell"><span className="text-xs text-[#94a3b8]">{u.institute}</span></td>
                   <td className="py-3.5 px-6 hidden lg:table-cell">
                     <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: `${levelColors[u.level] ?? "#64748b"}18`, color: levelColors[u.level] ?? "#64748b" }}>{u.level}</span>
                   </td>
@@ -143,7 +157,6 @@ export default function AdminStudentsPage() {
                   <td className="py-3.5 px-6 text-center hidden sm:table-cell">
                     <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${u.status === "active" ? "bg-[#10b981]/15 text-[#10b981]" : "bg-white/[0.06] text-[#64748b]"}`}>{u.status}</span>
                   </td>
-                  <td className="py-3.5 px-6 text-center hidden lg:table-cell"><span className="text-xs text-[#64748b]">{u.joinedAt}</span></td>
                   <td className="py-3.5 px-6">
                     <div className="flex items-center gap-1.5 justify-end">
                       <button onClick={() => setViewUser(u)} className="p-1.5 rounded-lg text-[#64748b] hover:text-[#a78bfa] hover:bg-[#7c3aed]/10 transition-colors"><Eye size={14} /></button>

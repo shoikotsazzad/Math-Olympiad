@@ -9,6 +9,7 @@ import { useRef, useState, useEffect } from "react";
 
 const navLinks = [
   { label: "Practice", href: "/tests", protected: true },
+  { label: "Live Exam", href: "/live-exam", protected: true },
   { label: "Olympiads", href: "/events", protected: false },
   { label: "Leaderboard", href: "/leaderboard", protected: false },
   { label: "Resources", href: "/topics", protected: false },
@@ -131,7 +132,7 @@ export default function Navbar() {
                     <p className="text-sm font-medium text-white">{authUser.name}</p>
                     <p className="text-xs text-[#64748b] mt-0.5">{authUser.email}</p>
                     <span className="inline-flex mt-1.5 items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#7c3aed]/20 text-[#a78bfa]">
-                      {authUser.role === "ADMIN" ? "Faculty Admin" : `${authUser.level} · ${authUser.department}`}
+                      {authUser.role === "ADMIN" ? "Faculty Admin" : `${authUser.level} · ${authUser.tier ?? authUser.department}`}
                     </span>
                   </div>
 

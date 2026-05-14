@@ -2,105 +2,41 @@
 
 import { useState } from "react";
 import { MessageSquare, ThumbsUp, Eye, Pin, Tag, ChevronRight, Plus, Flame, Clock } from "lucide-react";
+import { useAuthStore } from "@/store/authStore";
+import { communityPosts } from "@/lib/mock/community";
+import type { Tier } from "@/types";
 
 const categories = ["All", "Algebra", "Combinatorics", "Number Theory", "Geometry", "General"];
-
-const posts = [
-  {
-    id: 1,
-    title: "How do I approach Vieta's formulas in competition problems?",
-    category: "Algebra",
-    author: "Rahat Khan",
-    authorDept: "CSE",
-    time: "2h ago",
-    views: 142,
-    likes: 34,
-    replies: 12,
-    pinned: true,
-    tags: ["vieta", "polynomials"],
-  },
-  {
-    id: 2,
-    title: "Stuck on BdMO 2023 Problem 4 — any hints without spoiling?",
-    category: "Number Theory",
-    author: "Nadia Islam",
-    authorDept: "Math",
-    time: "5h ago",
-    views: 98,
-    likes: 21,
-    replies: 8,
-    pinned: false,
-    tags: ["bdmo", "number-theory"],
-  },
-  {
-    id: 3,
-    title: "Trigonometric identities — which ones are worth memorizing?",
-    category: "Geometry",
-    author: "Lamia Akter",
-    authorDept: "EEE",
-    time: "1d ago",
-    views: 210,
-    likes: 57,
-    replies: 19,
-    pinned: false,
-    tags: ["trig", "identities"],
-  },
-  {
-    id: 4,
-    title: "Pigeonhole principle trick I learned that might help others",
-    category: "Combinatorics",
-    author: "Adnan Chowdhury",
-    authorDept: "CSE",
-    time: "2d ago",
-    views: 341,
-    likes: 88,
-    replies: 24,
-    pinned: false,
-    tags: ["pigeonhole", "tip"],
-  },
-  {
-    id: 5,
-    title: "Study group forming for UIU internal olympiad — anyone interested?",
-    category: "General",
-    author: "Sarah Jubaida",
-    authorDept: "EEE",
-    time: "3d ago",
-    views: 187,
-    likes: 43,
-    replies: 31,
-    pinned: false,
-    tags: ["study-group", "event"],
-  },
-  {
-    id: 6,
-    title: "Modular arithmetic shortcut for large exponents — share your methods",
-    category: "Number Theory",
-    author: "Fahim Hossain",
-    authorDept: "CSE",
-    time: "4d ago",
-    views: 265,
-    likes: 60,
-    replies: 15,
-    pinned: false,
-    tags: ["modular", "exponents"],
-  },
-];
 
 const categoryColors: Record<string, string> = {
   Algebra: "#7c3aed",
   Combinatorics: "#f59e0b",
   "Number Theory": "#10b981",
   Geometry: "#3b82f6",
+  Inequalities: "#ef4444",
   General: "#94a3b8",
 };
 
+const tierColors: Record<Tier, string> = {
+  Beginner: "#10b981",
+  Intermediate: "#f59e0b",
+  Advanced: "#7c3aed",
+};
+
 export default function CommunityPage() {
+  const { user } = useAuthStore();
   const [activeCategory, setActiveCategory] = useState("All");
+  const [myTierOnly, setMyTierOnly] = useState(true);
   const [showNewPost, setShowNewPost] = useState(false);
   const [newTitle, setNewTitle] = useState("");
 
-  const filtered =
-    activeCategory === "All" ? posts : posts.filter((p) => p.category === activeCategory);
+  const userTier = user?.tier ?? "Beginner";
+
+  const filtered = communityPosts.filter((p) => {
+    const categoryMatch = activeCategory === "All" || p.category === activeCategory;
+    const tierMatch = !myTierOnly || p.tier === userTier;
+    return categoryMatch && tierMatch;
+  });
 
   return (
     <div className="space-y-6">
@@ -173,21 +109,44 @@ export default function CommunityPage() {
         </div>
       )}
 
-      {/* Category tabs */}
-      <div className="flex flex-wrap gap-2">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setActiveCategory(cat)}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
-              activeCategory === cat
-                ? "gradient-violet text-white"
-                : "bg-white/[0.06] text-[#94a3b8] hover:text-white hover:bg-white/[0.1]"
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
+      {/* Filters row */}
+      <div className="flex items-center justify-between flex-wrap gap-3">
+        <div className="flex flex-wrap gap-2">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
+                activeCategory === cat
+                  ? "gradient-violet text-white"
+                  : "bg-white/[0.06] text-[#94a3b8] hover:text-white hover:bg-white/[0.1]"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* Tier toggle */}
+        <button
+          onClick={() => setMyTierOnly((v) => !v)}
+          className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium border transition-all ${
+            myTierOnly
+              ? "border-transparent text-white"
+              : "bg-white/[0.06] border-white/[0.08] text-[#94a3b8]"
+          }`}
+          style={myTierOnly ? {
+            backgroundColor: `${tierColors[userTier]}20`,
+            borderColor: `${tierColors[userTier]}50`,
+            color: tierColors[userTier],
+          } : {}}
+        >
+          <span
+            className="w-2 h-2 rounded-full"
+            style={{ backgroundColor: tierColors[userTier] }}
+          />
+          {myTierOnly ? `${userTier} Only` : "All Tiers"}
+        </button>
       </div>
 
       {/* Posts */}
@@ -224,8 +183,17 @@ export default function CommunityPage() {
                   >
                     {post.category}
                   </span>
+                  <span
+                    className="text-xs font-medium px-2 py-0.5 rounded-full"
+                    style={{
+                      backgroundColor: `${tierColors[post.tier]}15`,
+                      color: tierColors[post.tier],
+                    }}
+                  >
+                    {post.tier}
+                  </span>
                   <span className="text-xs text-[#64748b]">
-                    {post.author} · {post.authorDept}
+                    {post.author} · {post.authorInstitute}
                   </span>
                   <span className="flex items-center gap-1 text-xs text-[#64748b]">
                     <Clock size={11} /> {post.time}
@@ -258,6 +226,12 @@ export default function CommunityPage() {
             </div>
           </div>
         ))}
+
+        {filtered.length === 0 && (
+          <div className="glass rounded-2xl p-10 text-center">
+            <p className="text-[#94a3b8] text-sm">No posts found. Be the first to post!</p>
+          </div>
+        )}
       </div>
     </div>
   );

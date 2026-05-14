@@ -1,19 +1,48 @@
-import { dashboardStats } from "@/lib/mock/dashboard";
+"use client";
+
+import { dashboardStatsByTier } from "@/lib/mock/dashboard";
 import StatsRow from "@/components/dashboard/StatsRow";
 import TopicMastery from "@/components/dashboard/TopicMastery";
 import RecentActivity from "@/components/dashboard/RecentActivity";
 import LearningPath from "@/components/dashboard/LearningPath";
 import RecommendedNext from "@/components/dashboard/RecommendedNext";
+import { useAuthStore } from "@/store/authStore";
+import type { Tier } from "@/types";
+
+const tierColors: Record<Tier, string> = {
+  Beginner: "#10b981",
+  Intermediate: "#f59e0b",
+  Advanced: "#7c3aed",
+};
 
 export default function DashboardPage() {
-  const stats = dashboardStats;
+  const { user } = useAuthStore();
+  const tier = user?.tier ?? "Beginner";
+  const stats = dashboardStatsByTier[tier];
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-start justify-between">
+      <div className="flex items-start justify-between flex-wrap gap-4">
         <div>
-          <h1 className="font-heading text-3xl font-bold text-white">Welcome back, Scholar.</h1>
+          <div className="flex items-center gap-2 mb-1">
+            <span
+              className="text-xs font-semibold px-2.5 py-0.5 rounded-full border"
+              style={{
+                color: tierColors[tier],
+                backgroundColor: `${tierColors[tier]}15`,
+                borderColor: `${tierColors[tier]}40`,
+              }}
+            >
+              {tier}
+            </span>
+            {user?.institute && (
+              <span className="text-xs text-[#64748b]">{user.institute}</span>
+            )}
+          </div>
+          <h1 className="font-heading text-3xl font-bold text-white">
+            Welcome back, {user?.name ?? "Scholar"}.
+          </h1>
           <p className="text-[#94a3b8] text-sm mt-1">
             Your intellectual journey continues. You are in the top 2% this week.
           </p>
