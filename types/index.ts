@@ -85,6 +85,30 @@ export interface TestAttempt {
   topicBreakdown: { topic: string; accuracy: number; avgAccuracy: number }[];
 }
 
+export interface Lesson {
+  id: string;
+  moduleId: string;
+  order: number;
+  title: string;
+  estimatedMinutes: number;
+  content: string;
+  keyPoints: string[];
+  example: { problem: string; solution: string };
+  resources: { title: string; type: "video" | "pdf" | "article" }[];
+}
+
+export interface PuzzleSubmission {
+  id: string;
+  puzzleId: string;
+  puzzleTitle: string;
+  studentName: string;
+  studentInstitute: string;
+  studentTier: Tier;
+  answer: string;
+  submittedAt: string;
+  isCorrect?: boolean;
+}
+
 export interface DailyPuzzle {
   id: string;
   date: string;
@@ -94,7 +118,7 @@ export interface DailyPuzzle {
   topic: string;
   streakCount: number;
   topSolvers: { name: string; time: string; avatar?: string }[];
-  previousPuzzles: { id: string; title: string; topic: string; date: string }[];
+  previousPuzzles: { id: string; title: string; topic: string; date: string; content: string }[];
 }
 
 export interface CommunityPost {

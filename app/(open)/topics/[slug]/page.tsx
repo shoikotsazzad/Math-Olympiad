@@ -1,24 +1,14 @@
-import { topics, numberTheoryModules } from "@/lib/mock/topics";
+import { topics, topicModulesBySlug, lessonsByModuleId } from "@/lib/mock/topics";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BookOpen, ExternalLink, Download, Users, Trophy, Flame } from "lucide-react";
+import { Users, Trophy } from "lucide-react";
 import { LoginWall } from "@/components/auth/LoginWall";
-
-const difficultyColors: Record<string, string> = {
-  Beginner: "#10b981",
-  Intermediate: "#f59e0b",
-  Advanced: "#7c3aed",
-  Elite: "#ef4444",
-};
+import { TopicHeroCTA } from "@/components/topics/TopicHeroCTA";
+import { TopicContentViewer } from "@/components/topics/TopicContentViewer";
 
 const topContributors = [
   { name: "Alex Chen", solved: 326, level: "Grandmaster" },
-  { name: "Sarah Jenkins", level: "Prime Master", solved: 289 },
-];
-
-const expertResources = [
-  { title: "Theorem Omnibus v2.4", type: "PDF", size: "12.6 MB" },
-  { title: "MIT OpenCourseWare: NT", type: "Video", external: true },
+  { name: "Sarah Jenkins", solved: 289, level: "Prime Master" },
 ];
 
 export default async function TopicDetailPage({
@@ -30,7 +20,7 @@ export default async function TopicDetailPage({
   const topic = topics.find((t) => t.slug === slug);
   if (!topic) notFound();
 
-  const modules = slug === "number-theory" ? numberTheoryModules : [];
+  const modules = topicModulesBySlug[slug] ?? [];
 
   return (
     <div className="space-y-6">
@@ -47,7 +37,7 @@ export default async function TopicDetailPage({
             className="text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider"
             style={{ backgroundColor: `${topic.color}20`, color: topic.color }}
           >
-            {topic.tier} • {modules.length * 4} Modules • {topic.lessonCount * 4} Lessons
+            {topic.tier} • {modules.length} Modules • {topic.lessonCount} Lessons
           </span>
           <h1 className="font-heading text-5xl font-extrabold text-white mt-4 italic">
             {topic.name}
@@ -55,13 +45,8 @@ export default async function TopicDetailPage({
           <p className="text-[#94a3b8] text-sm mt-3 max-w-2xl leading-relaxed">
             {topic.description}
           </p>
-          <div className="mt-5 flex gap-3">
-            <Link
-              href="/login"
-              className="gradient-violet glow-violet text-white text-sm font-semibold px-5 py-2.5 rounded-xl hover:scale-105 transition-all"
-            >
-              Sign In to Start Learning
-            </Link>
+          <div className="mt-5 flex gap-3 flex-wrap">
+            <TopicHeroCTA />
             <Link
               href="/topics"
               className="bg-white/[0.06] border border-white/[0.1] text-white text-sm font-medium px-5 py-2.5 rounded-xl hover:bg-white/[0.1] transition-all"
@@ -81,67 +66,14 @@ export default async function TopicDetailPage({
           {/* Left: Syllabus Path */}
           <div className="lg:col-span-2 space-y-4">
             <h2 className="font-heading font-semibold text-white text-xl flex items-center gap-2">
-              <BookOpen size={18} className="text-[#7c3aed]" /> Syllabus Path
+              Syllabus Path
             </h2>
 
-            {modules.length > 0 ? (
-              modules.map((mod) => (
-                <div key={mod.id} className="glass rounded-2xl p-5 flex items-start justify-between gap-4">
-                  <div className="flex items-start gap-4">
-                    <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0"
-                      style={{ backgroundColor: `${topic.color}20`, color: topic.color }}
-                    >
-                      Σ
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-heading font-semibold text-white">{mod.name}</h3>
-                        <span
-                          className="text-xs px-2 py-0.5 rounded-full font-medium"
-                          style={{
-                            backgroundColor: `${difficultyColors[mod.difficulty]}15`,
-                            color: difficultyColors[mod.difficulty],
-                          }}
-                        >
-                          {mod.difficulty}
-                        </span>
-                      </div>
-                      <p className="text-sm text-[#94a3b8]">{mod.description}</p>
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-2 shrink-0">
-                    <button className="flex items-center gap-2 gradient-violet text-white text-xs font-medium px-4 py-2 rounded-lg whitespace-nowrap hover:scale-105 transition-all">
-                      ▶ Start Lesson
-                    </button>
-                    <button className="text-xs text-[#94a3b8] hover:text-white transition-colors text-center">
-                      Practice Problems
-                    </button>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="glass rounded-2xl p-8 text-center">
-                <p className="text-[#94a3b8]">Modules coming soon for {topic.name}.</p>
-              </div>
-            )}
-
-            <h2 className="font-heading font-semibold text-white text-xl pt-2">Expert Resources</h2>
-            <div className="grid sm:grid-cols-2 gap-4">
-              {expertResources.map((res) => (
-                <div key={res.title} className="glass rounded-xl p-4 flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-[#7c3aed]/20 flex items-center justify-center text-[#7c3aed]">
-                    {res.external ? <ExternalLink size={14} /> : <Download size={14} />}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm text-white font-medium truncate">{res.title}</p>
-                    <p className="text-xs text-[#94a3b8]">
-                      {res.type} {res.size && `• ${res.size}`}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <TopicContentViewer
+              modules={modules}
+              lessonsByModuleId={lessonsByModuleId}
+              topicColor={topic.color}
+            />
           </div>
 
           {/* Right sidebar */}
@@ -154,16 +86,17 @@ export default async function TopicDetailPage({
                     <circle cx="48" cy="48" r="40" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="8" />
                     <circle
                       cx="48" cy="48" r="40" fill="none"
-                      stroke="#7c3aed" strokeWidth="8"
-                      strokeDasharray={`${2 * Math.PI * 40 * 0.75} ${2 * Math.PI * 40}`}
+                      stroke={topic.color} strokeWidth="8"
+                      strokeDasharray={`${2 * Math.PI * 40 * 0.25} ${2 * Math.PI * 40}`}
                       strokeLinecap="round"
                     />
                   </svg>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="font-heading font-bold text-white text-xl">75%</span>
+                    <span className="font-heading font-bold text-white text-xl">0%</span>
                   </div>
                 </div>
               </div>
+              <p className="text-xs text-[#64748b] text-center mt-2">Start the first lesson to begin tracking</p>
             </div>
 
             <div className="glass rounded-2xl p-5">
@@ -198,9 +131,32 @@ export default async function TopicDetailPage({
               </button>
             </div>
 
-            <button className="w-full gradient-violet glow-violet text-white font-semibold py-3 rounded-xl hover:scale-105 transition-all text-sm flex items-center justify-center gap-2">
-              <Flame size={16} /> Start Daily Challenge
-            </button>
+            <div
+              className="glass rounded-xl p-4 border"
+              style={{ borderColor: `${topic.color}30` }}
+            >
+              <p className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: topic.color }}>
+                Topic Stats
+              </p>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between text-[#94a3b8]">
+                  <span>Modules</span>
+                  <span className="text-white font-medium">{modules.length}</span>
+                </div>
+                <div className="flex justify-between text-[#94a3b8]">
+                  <span>Lessons</span>
+                  <span className="text-white font-medium">{topic.lessonCount}</span>
+                </div>
+                <div className="flex justify-between text-[#94a3b8]">
+                  <span>Problems</span>
+                  <span className="text-white font-medium">{topic.problemCount}</span>
+                </div>
+                <div className="flex justify-between text-[#94a3b8]">
+                  <span>Level</span>
+                  <span className="font-medium" style={{ color: topic.color }}>{topic.tier}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </LoginWall>

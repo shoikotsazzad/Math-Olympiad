@@ -108,31 +108,33 @@ export default function TopicsPage() {
         )}
       </div>
 
-      {/* CTA */}
-      <div className="glass rounded-2xl p-8 text-center">
-        <Lock size={20} className="text-[#a78bfa] mx-auto mb-3" />
-        <h3 className="font-heading font-bold text-white text-2xl mb-2">
-          Ready to Start Learning?
-        </h3>
-        <p className="text-[#94a3b8] text-sm mb-6 max-w-md mx-auto">
-          Sign in to access full lessons, problem sets, progress tracking, and personalized
-          recommendations across all topics.
-        </p>
-        <div className="flex justify-center gap-4">
-          <Link
-            href="/login"
-            className="gradient-violet glow-violet text-white font-semibold px-6 py-2.5 rounded-full hover:scale-105 transition-all text-sm"
-          >
-            Sign In to Start
-          </Link>
-          <Link
-            href="/about"
-            className="bg-white/[0.06] border border-white/[0.1] text-white font-medium px-6 py-2.5 rounded-full hover:bg-white/[0.1] transition-all text-sm"
-          >
-            Learn More
-          </Link>
+      {/* CTA — only for visitors */}
+      {!user && (
+        <div className="glass rounded-2xl p-8 text-center">
+          <Lock size={20} className="text-[#a78bfa] mx-auto mb-3" />
+          <h3 className="font-heading font-bold text-white text-2xl mb-2">
+            Ready to Start Learning?
+          </h3>
+          <p className="text-[#94a3b8] text-sm mb-6 max-w-md mx-auto">
+            Sign in to access full lessons, problem sets, progress tracking, and personalized
+            recommendations across all topics.
+          </p>
+          <div className="flex justify-center gap-4">
+            <Link
+              href="/login"
+              className="gradient-violet glow-violet text-white font-semibold px-6 py-2.5 rounded-full hover:scale-105 transition-all text-sm"
+            >
+              Sign In to Start
+            </Link>
+            <Link
+              href="/about"
+              className="bg-white/[0.06] border border-white/[0.1] text-white font-medium px-6 py-2.5 rounded-full hover:bg-white/[0.1] transition-all text-sm"
+            >
+              Learn More
+            </Link>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
