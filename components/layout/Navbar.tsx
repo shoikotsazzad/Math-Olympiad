@@ -158,14 +158,24 @@ export default function Navbar() {
                         </Link>
                       </>
                     ) : (
-                      <Link
-                        href="/admin/dashboard"
-                        onClick={() => setOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-[#94a3b8] hover:text-white hover:bg-white/[0.05] transition-colors"
-                      >
-                        <LayoutDashboard size={15} />
-                        Admin Dashboard
-                      </Link>
+                      <>
+                        <Link
+                          href="/admin/dashboard"
+                          onClick={() => setOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-[#94a3b8] hover:text-white hover:bg-white/[0.05] transition-colors"
+                        >
+                          <LayoutDashboard size={15} />
+                          Admin Dashboard
+                        </Link>
+                        <Link
+                          href="/admin/profile"
+                          onClick={() => setOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-[#94a3b8] hover:text-white hover:bg-white/[0.05] transition-colors"
+                        >
+                          <User size={15} />
+                          Profile
+                        </Link>
+                      </>
                     )}
                   </div>
 

@@ -9,6 +9,8 @@ interface UsersState {
   updateUser: (id: string, data: Partial<AdminUser>) => void;
 }
 
+const mockIds = new Set(mockUsers.map((u) => u.id));
+
 export const useUsersStore = create<UsersState>()(
   persist(
     (set) => ({
@@ -18,6 +20,15 @@ export const useUsersStore = create<UsersState>()(
       updateUser: (id, data) =>
         set((s) => ({ users: s.users.map((u) => (u.id === id ? { ...u, ...data } : u)) })),
     }),
-    { name: "uiu-users" }
+    {
+      name: "uiu-users",
+      version: 2,
+      migrate: (persisted: unknown) => {
+        // Keep real signup users (not in mock), refresh all mock data
+        const old = persisted as { users?: AdminUser[] } | undefined;
+        const signupUsers = (old?.users ?? []).filter((u) => !mockIds.has(u.id));
+        return { users: [...signupUsers, ...mockUsers] };
+      },
+    }
   )
 );

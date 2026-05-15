@@ -11,7 +11,6 @@ import {
   Shield,
   BookOpen,
   MessageSquare,
-  UserCircle,
   Radio,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -35,7 +34,6 @@ const adminLinks = [
   { icon: BookOpen, label: "Topics", href: "/admin/topics" },
   { icon: MessageSquare, label: "Community", href: "/admin/community" },
   { icon: Shield, label: "Events", href: "/admin/events" },
-  { icon: UserCircle, label: "Profile", href: "/admin/profile" },
 ];
 
 export default function Sidebar() {

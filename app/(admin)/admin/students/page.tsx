@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useUsersStore } from "@/store/usersStore";
-import type { AdminUser } from "@/lib/mock/users";
 import type { Tier } from "@/types";
 import { Search, Trash2, Eye, Users, UserX } from "lucide-react";
 
@@ -17,7 +17,6 @@ export default function AdminStudentsPage() {
   const { users, removeUser } = useUsersStore();
   const [search, setSearch] = useState("");
   const [filterTier, setFilterTier] = useState<Tier | "All">("All");
-  const [viewUser, setViewUser] = useState<AdminUser | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const filtered = users.filter((u) => {
@@ -28,7 +27,6 @@ export default function AdminStudentsPage() {
 
   const doDelete = () => {
     if (deleteId) removeUser(deleteId);
-    if (viewUser?.id === deleteId) setViewUser(null);
     setDeleteId(null);
   };
 
@@ -62,44 +60,6 @@ export default function AdminStudentsPage() {
           ))}
         </div>
       </div>
-
-      {/* View modal */}
-      {viewUser && (
-        <div className="glass rounded-2xl p-6 border border-[#7c3aed]/25 space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="font-heading font-semibold text-white">Student Profile</h3>
-            <button onClick={() => setViewUser(null)} className="text-[#64748b] hover:text-white">✕</button>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 gradient-violet rounded-full flex items-center justify-center text-white font-bold text-xl shrink-0">{viewUser.name[0]}</div>
-            <div>
-              <p className="font-heading font-semibold text-white text-lg">{viewUser.name}</p>
-              <p className="text-sm text-[#64748b]">{viewUser.email}</p>
-              <div className="flex items-center gap-2 mt-1">
-                <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: `${tierColors[viewUser.tier]}18`, color: tierColors[viewUser.tier] }}>{viewUser.tier}</span>
-                <span className="text-xs text-[#64748b]">{viewUser.institute}</span>
-              </div>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {[
-              { label: "Department", value: viewUser.dept },
-              { label: "Institute", value: viewUser.institute },
-              { label: "Level", value: viewUser.level },
-              { label: "XP", value: viewUser.xp.toLocaleString() },
-              { label: "Streak", value: `${viewUser.streak} days` },
-              { label: "Tests Taken", value: viewUser.testsTaken },
-              { label: "Avg. Score", value: `${viewUser.avgScore}%` },
-              { label: "Joined", value: viewUser.joinedAt },
-            ].map(({ label, value }) => (
-              <div key={label} className="bg-white/[0.04] rounded-xl p-3">
-                <p className="text-xs text-[#64748b] mb-1">{label}</p>
-                <p className="text-sm font-medium text-white">{value}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* Delete confirm */}
       {deleteId && (
@@ -159,7 +119,7 @@ export default function AdminStudentsPage() {
                   </td>
                   <td className="py-3.5 px-6">
                     <div className="flex items-center gap-1.5 justify-end">
-                      <button onClick={() => setViewUser(u)} className="p-1.5 rounded-lg text-[#64748b] hover:text-[#a78bfa] hover:bg-[#7c3aed]/10 transition-colors"><Eye size={14} /></button>
+                      <Link href={`/admin/students/${u.id}`} className="p-1.5 rounded-lg text-[#64748b] hover:text-[#a78bfa] hover:bg-[#7c3aed]/10 transition-colors"><Eye size={14} /></Link>
                       <button onClick={() => setDeleteId(u.id)} className="p-1.5 rounded-lg text-[#64748b] hover:text-red-400 hover:bg-red-500/10 transition-colors"><Trash2 size={14} /></button>
                     </div>
                   </td>
