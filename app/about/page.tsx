@@ -5,29 +5,44 @@ import { Users, Mail, MapPin, Sigma } from "lucide-react";
 
 const milestones = [
   {
-    year: "2019",
-    title: "UIU Math Circle Founded",
-    desc: "UIU Math Circle established with 40 founding members across multiple departments.",
+    year: "2001",
+    title: "The Beginning",
+    desc: "Educators and mathematicians united to popularize creative mathematics, laying the foundation for an organized olympiad movement in Bangladesh.",
   },
   {
-    year: "2021",
-    title: "First BdMO Team",
-    desc: "First UIU team qualifies for the National Bangladesh Mathematical Olympiad.",
+    year: "2003",
+    title: "First National Olympiad",
+    desc: "The first large-scale national math olympiad was organized by Bangladesh Mathematical Olympiad Committee, supported by Dutch-Bangla Bank PLC, drawing students from schools and colleges nationwide.",
   },
   {
-    year: "2022",
-    title: "Portal Launch",
-    desc: "Prep Portal v1 launched — 500 students enrolled in the first month alone.",
+    year: "2004",
+    title: "Bangladesh Joins IMO",
+    desc: "Bangladesh officially participated in the International Mathematical Olympiad for the first time — a landmark moment for the country's mathematical community.",
   },
   {
-    year: "2023",
-    title: "IMO Selection",
-    desc: "Two UIU students selected for the Bangladesh IMO team for the very first time.",
+    year: "2005–2009",
+    title: "Rapid Growth",
+    desc: "Regional olympiads spread across cities. Math camps, training sessions, and problem-solving books gained widespread popularity among students.",
   },
   {
-    year: "2024",
-    title: "4,000+ Students",
-    desc: "Platform reaches 4,000+ active students across all 12 departments at UIU.",
+    year: "2010",
+    title: "Olympiad Culture Expands",
+    desc: "Math Olympiad became a household name among school and college students. Newspaper coverage and online forums amplified interest nationwide.",
+  },
+  {
+    year: "2014",
+    title: "International Recognition",
+    desc: "Bangladeshi students began achieving stronger international performances through improved training systems and dedicated mentorship programs.",
+  },
+  {
+    year: "2020",
+    title: "Online Olympiads",
+    desc: "The pandemic shifted all olympiad activities online. Virtual camps, digital exams, and e-learning platforms ensured continuity through COVID-19.",
+  },
+  {
+    year: "2026",
+    title: "Present Era",
+    desc: "BdMO now organizes nationwide programs with thousands of participants annually. Students prepare using online platforms, global resources, and advanced problem-solving communities.",
   },
 ];
 
@@ -138,7 +153,7 @@ export default function AboutPage() {
         <section className="max-w-screen-xl mx-auto px-6 py-14">
           <SectionLabel>Timeline</SectionLabel>
           <h2 className="font-heading text-3xl font-bold text-white text-center mb-12">
-            Our Journey
+            History of Math Olympiad in Bangladesh
           </h2>
 
           <div className="relative max-w-3xl mx-auto">

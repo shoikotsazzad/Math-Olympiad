@@ -12,6 +12,7 @@ import {
   BookOpen,
   MessageSquare,
   Radio,
+  Bell,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/authStore";
@@ -23,6 +24,7 @@ const studentLinks = [
   { icon: FileText, label: "Tests", href: "/tests" },
   { icon: Sigma, label: "Topics", href: "/topics" },
   { icon: Users, label: "Community", href: "/community" },
+  { icon: Bell, label: "Notices", href: "/notices" },
 ];
 
 const adminLinks = [
@@ -34,6 +36,7 @@ const adminLinks = [
   { icon: BookOpen, label: "Topics", href: "/admin/topics" },
   { icon: MessageSquare, label: "Community", href: "/admin/community" },
   { icon: Shield, label: "Events", href: "/admin/events" },
+  { icon: Bell, label: "Notices", href: "/admin/notices" },
 ];
 
 export default function Sidebar() {

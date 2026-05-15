@@ -47,12 +47,18 @@ export default function Navbar() {
       <div className="max-w-screen-xl mx-auto px-6 h-16 flex items-center gap-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 shrink-0">
-          <div className="w-8 h-8 gradient-violet rounded-lg flex items-center justify-center text-white font-bold text-sm font-heading">
-            Σ
+          <div className="w-9 h-9 shrink-0 rounded-full overflow-hidden ring-2 ring-[#7c3aed]/60 shadow-md shadow-[#7c3aed]/30">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.png" alt="UIU CMOR" className="w-full h-full object-cover" />
           </div>
-          <span className="font-heading font-bold text-white tracking-wide text-sm uppercase hidden sm:block">
-            UIU Olympiad
-          </span>
+          <div className="hidden sm:flex flex-col leading-tight">
+            <span className="font-heading font-bold text-white tracking-wide text-xs uppercase">
+              UIU Centre For
+            </span>
+            <span className="font-heading font-semibold text-[#a78bfa] tracking-wide text-[10px] uppercase">
+              Math Olympiad and Research
+            </span>
+          </div>
         </Link>
 
         {/* Nav links */}

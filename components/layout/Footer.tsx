@@ -26,17 +26,23 @@ export default function Footer() {
     <footer className="border-t border-white/[0.06] mt-auto">
       <div className="max-w-screen-xl mx-auto px-6 py-12 grid md:grid-cols-3 gap-10">
         <div>
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 gradient-violet rounded-lg flex items-center justify-center text-white font-bold text-sm font-heading">
-              Σ
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 shrink-0 rounded-full overflow-hidden ring-2 ring-[#7c3aed]/60 shadow-md shadow-[#7c3aed]/30">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo.png" alt="UIU CMOR" className="w-full h-full object-cover" />
             </div>
-            <span className="font-heading font-bold text-white text-sm uppercase tracking-wide">
-              UIU Olympiad
-            </span>
+            <div className="flex flex-col leading-tight">
+              <span className="font-heading font-bold text-white text-xs uppercase tracking-wide">
+                UIU Centre for Math
+              </span>
+              <span className="font-heading font-semibold text-[#a78bfa] text-[10px] uppercase tracking-wide">
+                Olympiad and Research
+              </span>
+            </div>
           </div>
           <p className="text-xs text-[#94a3b8] leading-relaxed max-w-xs">
-            Official Preparation Portal for United International University&apos;s Mathematical
-            Circle and BdMO contenders.
+            Elevating the standard of Mathematical Excellence.<br />
+            <span className="text-[#a78bfa] italic">&ldquo;Think Deep. Solve Smart&rdquo;</span>
           </p>
         </div>
 
@@ -63,7 +69,7 @@ export default function Footer() {
 
       <div className="border-t border-white/[0.06] py-4">
         <p className="text-center text-xs text-[#64748b]">
-          © 2024 UIU Olympiad Prep Portal. All rights reserved.
+          © 2024 UIU Centre for Math Olympiad and Research. All rights reserved.
         </p>
       </div>
     </footer>

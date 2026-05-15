@@ -42,10 +42,9 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 bg-[#7c3aed]/20 border border-[#7c3aed]/30 rounded-full px-4 py-1.5 text-sm text-[#a78bfa] mb-8"
+          className="inline-flex items-center bg-[#7c3aed]/20 border border-[#7c3aed]/30 rounded-full px-6 py-2 text-lg text-white/75 mb-8 font-heading font-semibold italic"
         >
-          <span className="w-2 h-2 rounded-full bg-[#a78bfa] animate-pulse" />
-          2024 BdMO Qualifiers Now Open
+          Think Deep. Solve Smart
         </motion.div>
 
         {/* Heading */}
@@ -53,22 +52,22 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="font-heading font-extrabold text-5xl md:text-7xl text-white leading-tight max-w-3xl"
+          className="font-heading font-extrabold leading-tight max-w-5xl"
         >
-          UIU Math
+          <span className="text-white text-4xl md:text-6xl">UIU</span>
+          <span className="gradient-text text-4xl md:text-6xl"> CENTRE FOR</span>
           <br />
-          <span className="gradient-text">Olympiad Prep</span>
+          <span className="gradient-text text-2xl md:text-4xl">MATH OLYMPIAD AND RESEARCH</span>
         </motion.h1>
 
-        {/* Sub-line */}
+        {/* Motto */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-6 text-lg text-[#94a3b8] max-w-lg leading-relaxed"
+          className="mt-5 text-base text-[#94a3b8] max-w-xl leading-relaxed"
         >
-          Practice smart. Compete fearless. Win medals. Join the elite community of mathematical
-          thinkers at UIU and master the art of problem solving.
+          Elevating the standard of Mathematical Excellence
         </motion.p>
 
         {/* CTAs */}
