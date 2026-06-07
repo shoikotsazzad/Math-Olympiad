@@ -3,18 +3,21 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Eye, EyeOff, Mail, Lock, User, Building2, AlertCircle } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, Building2, AlertCircle, GraduationCap } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 import { useUsersStore } from "@/store/usersStore";
 import type { Tier } from "@/types";
 
 type Tab = "signin" | "signup";
 
-const TIERS: { value: Tier; label: string; subtitle: string; color: string; border: string; bg: string }[] = [
-  { value: "Beginner",     label: "Beginner",     subtitle: "School Level",           color: "#10b981", border: "border-[#10b981]/60", bg: "bg-[#10b981]/10" },
-  { value: "Intermediate", label: "Intermediate", subtitle: "College Level",          color: "#f59e0b", border: "border-[#f59e0b]/60", bg: "bg-[#f59e0b]/10" },
-  { value: "Advanced",     label: "Advanced",     subtitle: "University & Above",     color: "#d97706", border: "border-[#d97706]/60", bg: "bg-[#d97706]/10" },
+const EDUCATION_LEVELS = [
+  { label: "School",                   tier: "Beginner"     as Tier, subtitle: "Beginner" },
+  { label: "College",                  tier: "Intermediate" as Tier, subtitle: "Intermediate" },
+  { label: "Undergraduate / Graduate", tier: "Advanced"     as Tier, subtitle: "Advanced" },
 ];
+
+const inputCls =
+  "w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-sm text-slate-900 placeholder-slate-400 outline-none focus:border-[#d97706]/60 focus:ring-2 focus:ring-[#d97706]/10 transition-all";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -34,7 +37,7 @@ export default function LoginPage() {
   const [suName, setSuName] = useState("");
   const [suEmail, setSuEmail] = useState("");
   const [suInstitute, setSuInstitute] = useState("");
-  const [suTier, setSuTier] = useState<Tier>("Beginner");
+  const [suEduLevel, setSuEduLevel] = useState("");
   const [suPass, setSuPass] = useState("");
   const [suConfirm, setSuConfirm] = useState("");
   const [suShowPass, setSuShowPass] = useState(false);
@@ -58,21 +61,25 @@ export default function LoginPage() {
     e.preventDefault();
     setSuError("");
     if (!suName.trim()) return setSuError("Please enter your full name.");
-    if (!suInstitute.trim()) return setSuError("Please enter your school, college, or university name.");
+    if (!suInstitute.trim()) return setSuError("Please enter your institution name.");
+    if (!suEduLevel) return setSuError("Please select your education level.");
     if (!suEmail.trim() || !suEmail.includes("@")) return setSuError("Enter a valid email address.");
     if (!suPass.trim() || suPass.length < 6) return setSuError("Password must be at least 6 characters.");
     if (suPass !== suConfirm) return setSuError("Passwords do not match.");
+
+    const matched = EDUCATION_LEVELS.find((l) => l.label === suEduLevel);
+    const tier: Tier = matched?.tier ?? "Beginner";
+
     setSuLoading(true);
     await new Promise((r) => setTimeout(r, 700));
-    const now = new Date();
-    const joinedAt = now.toLocaleString("en-US", { month: "short", year: "numeric" });
+    const joinedAt = new Date().toLocaleString("en-US", { month: "short", year: "numeric" });
     addUser({
       id: `u-${Date.now()}`,
       name: suName.trim(),
       email: suEmail.trim(),
       dept: "",
       institute: suInstitute.trim(),
-      tier: suTier,
+      tier,
       level: "Beginner",
       xp: 0,
       streak: 0,
@@ -81,45 +88,40 @@ export default function LoginPage() {
       joinedAt,
       status: "active",
     });
-    loginAsStudent(suEmail.trim(), suName.trim(), suTier, suInstitute.trim());
+    loginAsStudent(suEmail.trim(), suName.trim(), tier, suInstitute.trim());
     router.push("/dashboard");
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#080810] px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center bg-[#fef9f0] px-4 py-12">
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-[#d97706]/15 blur-[120px]" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-[#d97706]/8 blur-[120px]" />
       </div>
 
       <div className="relative w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="w-10 h-10 gradient-orange rounded-xl flex items-center justify-center text-white font-bold text-base font-heading">
-              Σ
-            </div>
-            <span className="font-heading font-bold text-white tracking-wide text-base uppercase">
-              UIU Olympiad
-            </span>
+          <Link href="/" className="inline-flex mb-6">
+            <img src="/logo1.png" alt="UIU CMOR" className="h-20 w-auto object-contain" />
           </Link>
-          <h1 className="font-heading text-2xl font-bold text-white">
+          <h1 className="font-heading text-2xl font-bold text-slate-900">
             {tab === "signin" ? "Welcome back" : "Create account"}
           </h1>
-          <p className="text-sm text-[#64748b] mt-1">
+          <p className="text-sm text-slate-500 mt-1">
             {tab === "signin" ? "Sign in to continue your journey" : "Join the UIU Olympiad community"}
           </p>
         </div>
 
         {/* Card */}
-        <div className="rounded-2xl bg-[#0d0d1a] border border-white/[0.08] overflow-hidden">
+        <div className="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
           {/* Tabs */}
-          <div className="grid grid-cols-2 border-b border-white/[0.08]">
+          <div className="grid grid-cols-2 border-b border-slate-200">
             {(["signin", "signup"] as Tab[]).map((t) => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
                 className={`py-3.5 text-sm font-medium transition-colors relative ${
-                  tab === t ? "text-white" : "text-[#64748b] hover:text-[#94a3b8]"
+                  tab === t ? "text-slate-900" : "text-slate-400 hover:text-slate-600"
                 }`}
               >
                 {t === "signin" ? "Sign In" : "Sign Up"}
@@ -134,39 +136,39 @@ export default function LoginPage() {
             {/* ── Sign In ── */}
             {tab === "signin" && (
               <form onSubmit={handleSignIn} className="space-y-4">
-                <p className="text-xs text-[#64748b] mb-5">
+                <p className="text-xs text-slate-400 mb-5">
                   Sign in with your email and password to access your dashboard.
                 </p>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-[#94a3b8] uppercase tracking-wider">Email Address</label>
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Email Address</label>
                   <div className="relative">
-                    <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748b]" />
+                    <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                     <input
                       type="email"
                       value={siEmail}
                       onChange={(e) => setSiEmail(e.target.value)}
                       placeholder="you@gmail.com"
-                      className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/60 focus:bg-white/[0.06] transition-all"
+                      className={inputCls}
                     />
                   </div>
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-[#94a3b8] uppercase tracking-wider">Password</label>
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Password</label>
                   <div className="relative">
-                    <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748b]" />
+                    <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                     <input
                       type={siShowPass ? "text" : "password"}
                       value={siPass}
                       onChange={(e) => setSiPass(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-11 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/60 focus:bg-white/[0.06] transition-all"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-11 py-3 text-sm text-slate-900 placeholder-slate-400 outline-none focus:border-[#d97706]/60 focus:ring-2 focus:ring-[#d97706]/10 transition-all"
                     />
                     <button
                       type="button"
                       onClick={() => setSiShowPass((v) => !v)}
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#64748b] hover:text-[#94a3b8] transition-colors"
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
                     >
                       {siShowPass ? <EyeOff size={15} /> : <Eye size={15} />}
                     </button>
@@ -174,7 +176,7 @@ export default function LoginPage() {
                 </div>
 
                 {siError && (
-                  <div className="flex items-center gap-2 text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2.5">
+                  <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2.5">
                     <AlertCircle size={13} />
                     {siError}
                   </div>
@@ -188,7 +190,7 @@ export default function LoginPage() {
                   {siLoading ? "Signing in…" : "Sign In"}
                 </button>
 
-                <p className="text-xs text-[#475569] text-center pt-1">
+                <p className="text-xs text-slate-400 text-center pt-1">
                   Any email + password (6+ chars) works for demo
                 </p>
               </form>
@@ -200,74 +202,64 @@ export default function LoginPage() {
                 {/* Name + Institute */}
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-xs font-medium text-[#94a3b8] uppercase tracking-wider">Full Name</label>
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Full Name</label>
                     <div className="relative">
-                      <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748b]" />
+                      <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                       <input
                         type="text"
                         value={suName}
                         onChange={(e) => setSuName(e.target.value)}
                         placeholder="Your name"
-                        className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/60 transition-all"
+                        className={inputCls}
                       />
                     </div>
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-xs font-medium text-[#94a3b8] uppercase tracking-wider">Institute</label>
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Institution</label>
                     <div className="relative">
-                      <Building2 size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748b]" />
+                      <Building2 size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                       <input
                         type="text"
                         value={suInstitute}
                         onChange={(e) => setSuInstitute(e.target.value)}
-                        placeholder="School / College / University"
-                        className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/60 transition-all"
+                        placeholder="Your school / college / uni"
+                        className={inputCls}
                       />
                     </div>
                   </div>
                 </div>
 
-                {/* Tier picker */}
-                <div className="space-y-2">
-                  <label className="text-xs font-medium text-[#94a3b8] uppercase tracking-wider">Your Level</label>
-                  <div className="grid grid-cols-3 gap-2">
-                    {TIERS.map((t) => {
-                      const selected = suTier === t.value;
-                      return (
-                        <button
-                          key={t.value}
-                          type="button"
-                          onClick={() => setSuTier(t.value)}
-                          className={`p-3 rounded-xl border text-left transition-all ${
-                            selected
-                              ? `${t.border} ${t.bg}`
-                              : "border-white/[0.08] bg-white/[0.04] hover:border-white/[0.15]"
-                          }`}
-                        >
-                          <p
-                            className="font-semibold text-xs leading-tight"
-                            style={{ color: selected ? t.color : "#94a3b8" }}
-                          >
-                            {t.label}
-                          </p>
-                          <p className="text-[10px] text-[#64748b] mt-0.5 leading-tight">{t.subtitle}</p>
-                        </button>
-                      );
-                    })}
+                {/* Education Level → auto-assigns tier */}
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Education Level</label>
+                  <div className="relative">
+                    <GraduationCap size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                    <select
+                      value={suEduLevel}
+                      onChange={(e) => setSuEduLevel(e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-sm text-slate-900 outline-none focus:border-[#d97706]/60 focus:ring-2 focus:ring-[#d97706]/10 transition-all appearance-none"
+                    >
+                      <option value="">Select your current level</option>
+                      {EDUCATION_LEVELS.map((l) => (
+                        <option key={l.label} value={l.label}>
+                          {l.label}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
 
                 {/* Email */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-[#94a3b8] uppercase tracking-wider">Email Address</label>
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Email Address</label>
                   <div className="relative">
-                    <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748b]" />
+                    <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                     <input
                       type="email"
                       value={suEmail}
                       onChange={(e) => setSuEmail(e.target.value)}
                       placeholder="you@gmail.com"
-                      className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/60 transition-all"
+                      className={inputCls}
                     />
                   </div>
                 </div>
@@ -275,42 +267,42 @@ export default function LoginPage() {
                 {/* Password + Confirm */}
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-xs font-medium text-[#94a3b8] uppercase tracking-wider">Password</label>
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Password</label>
                     <div className="relative">
-                      <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748b]" />
+                      <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                       <input
                         type={suShowPass ? "text" : "password"}
                         value={suPass}
                         onChange={(e) => setSuPass(e.target.value)}
                         placeholder="6+ characters"
-                        className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-11 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/60 transition-all"
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-11 py-3 text-sm text-slate-900 placeholder-slate-400 outline-none focus:border-[#d97706]/60 focus:ring-2 focus:ring-[#d97706]/10 transition-all"
                       />
                       <button
                         type="button"
                         onClick={() => setSuShowPass((v) => !v)}
-                        className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#64748b] hover:text-[#94a3b8] transition-colors"
+                        className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
                       >
                         {suShowPass ? <EyeOff size={15} /> : <Eye size={15} />}
                       </button>
                     </div>
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-xs font-medium text-[#94a3b8] uppercase tracking-wider">Confirm</label>
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Confirm</label>
                     <div className="relative">
-                      <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748b]" />
+                      <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                       <input
                         type="password"
                         value={suConfirm}
                         onChange={(e) => setSuConfirm(e.target.value)}
                         placeholder="Repeat password"
-                        className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/60 transition-all"
+                        className={inputCls}
                       />
                     </div>
                   </div>
                 </div>
 
                 {suError && (
-                  <div className="flex items-center gap-2 text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2.5">
+                  <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2.5">
                     <AlertCircle size={13} />
                     {suError}
                   </div>
@@ -328,8 +320,8 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <p className="text-center text-xs text-[#475569] mt-6">
-          <Link href="/" className="hover:text-[#94a3b8] transition-colors">
+        <p className="text-center text-xs text-slate-400 mt-6">
+          <Link href="/" className="hover:text-slate-600 transition-colors">
             ← Back to home
           </Link>
         </p>
