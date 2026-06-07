@@ -106,7 +106,7 @@ export default async function TopicDetailPage({
               <div className="space-y-3">
                 {topContributors.map((c) => (
                   <div key={c.name} className="flex items-center gap-3">
-                    <div className="w-8 h-8 gradient-violet rounded-full flex items-center justify-center text-white text-xs font-bold">
+                    <div className="w-8 h-8 gradient-orange rounded-full flex items-center justify-center text-white text-xs font-bold">
                       {c.name[0]}
                     </div>
                     <div>
@@ -118,7 +118,7 @@ export default async function TopicDetailPage({
               </div>
             </div>
 
-            <div className="rounded-2xl p-5 bg-gradient-to-br from-[#7c3aed]/30 to-[#4f46e5]/20 border border-[#7c3aed]/30">
+            <div className="rounded-2xl p-5 bg-gradient-to-br from-[#d97706]/30 to-[#f59e0b]/20 border border-[#d97706]/30">
               <div className="flex items-center gap-2 mb-2">
                 <Users size={16} className="text-[#a78bfa]" />
                 <h3 className="font-heading font-semibold text-white text-sm">Need a Mentor?</h3>
@@ -126,7 +126,7 @@ export default async function TopicDetailPage({
               <p className="text-xs text-[#94a3b8] mb-4 leading-relaxed">
                 Connect with Grandmasters for 1-on-1 sessions.
               </p>
-              <button className="w-full bg-white text-[#7c3aed] font-bold text-sm py-2.5 rounded-xl hover:bg-white/90 transition-all">
+              <button className="w-full bg-white text-[#d97706] font-bold text-sm py-2.5 rounded-xl hover:bg-white/90 transition-all">
                 Find a Mentor
               </button>
             </div>

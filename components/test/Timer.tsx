@@ -31,7 +31,7 @@ export default function Timer({ durationMinutes, onExpire }: Props) {
         "flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-mono font-bold",
         isWarning
           ? "bg-red-500/20 border border-red-500/40 text-red-400"
-          : "bg-[#7c3aed]/20 border border-[#7c3aed]/30 text-[#a78bfa]"
+          : "bg-[#d97706]/20 border border-[#d97706]/30 text-[#a78bfa]"
       )}
     >
       <Clock size={14} />

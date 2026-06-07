@@ -14,6 +14,12 @@ interface Props {
   questions: Question[];
 }
 
+const cardStyle = {
+  background: "#fff",
+  border: "1px solid rgba(15,23,42,0.07)",
+  boxShadow: "0 2px 8px rgba(15,23,42,0.05)",
+};
+
 export default function TestEngine({ test, questions }: Props) {
   const router = useRouter();
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -35,9 +41,7 @@ export default function TestEngine({ test, questions }: Props) {
       ...prev,
       [currentQ.id]:
         prev[currentQ.id] === "marked"
-          ? answers[currentQ.id] !== undefined
-            ? "answered"
-            : "unanswered"
+          ? answers[currentQ.id] !== undefined ? "answered" : "unanswered"
           : "marked",
     }));
   };
@@ -68,20 +72,20 @@ export default function TestEngine({ test, questions }: Props) {
       {/* Left: Question area */}
       <div className="flex-1 flex flex-col gap-4">
         {/* Top bar */}
-        <div className="glass rounded-xl px-4 py-3 flex items-center justify-between">
-          <div className="text-sm text-[#94a3b8]">
-            <span className="text-white font-medium">QUESTION: NUMBER THEORY</span>
-            <span className="mx-2">›</span>
+        <div className="bg-white rounded-xl px-4 py-3 flex items-center justify-between" style={cardStyle}>
+          <div className="text-sm text-slate-500">
+            <span className="text-slate-900 font-semibold">QUESTION: NUMBER THEORY</span>
+            <span className="mx-2 text-slate-300">›</span>
             <span>Question {currentIdx + 1}</span>
           </div>
           <div className="flex items-center gap-3">
             <button
               onClick={toggleMark}
               className={cn(
-                "flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg border transition-colors",
+                "flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border transition-colors",
                 states[currentQ.id] === "marked"
-                  ? "bg-[#f59e0b]/20 border-[#f59e0b]/40 text-[#f59e0b]"
-                  : "bg-white/[0.06] border-white/[0.1] text-[#94a3b8] hover:text-white"
+                  ? "bg-[#f59e0b]/15 border-[#f59e0b]/35 text-[#f59e0b]"
+                  : "bg-slate-100 border-slate-200 text-slate-500 hover:text-slate-800"
               )}
             >
               <Flag size={12} /> MARK FOR REVIEW
@@ -98,20 +102,17 @@ export default function TestEngine({ test, questions }: Props) {
         />
 
         {/* Navigation */}
-        <div className="glass rounded-xl px-4 py-3 flex items-center justify-between">
+        <div className="bg-white rounded-xl px-4 py-3 flex items-center justify-between" style={cardStyle}>
           <button
             disabled={currentIdx === 0}
             onClick={() => setCurrentIdx((i) => i - 1)}
-            className="flex items-center gap-2 text-sm text-[#94a3b8] hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-900 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             <ChevronLeft size={16} /> Previous
           </button>
 
           <div className="flex items-center gap-3">
-            <button
-              onClick={clearResponse}
-              className="flex items-center gap-1.5 text-xs text-[#f59e0b] hover:text-[#fbbf24] transition-colors"
-            >
+            <button onClick={clearResponse} className="flex items-center gap-1.5 text-xs text-[#f59e0b] hover:text-[#d97706] transition-colors font-semibold">
               <RotateCcw size={12} /> Clear Response
             </button>
             <button
@@ -121,9 +122,9 @@ export default function TestEngine({ test, questions }: Props) {
                 }
                 setCurrentIdx((i) => Math.min(i + 1, questions.length - 1));
               }}
-              className="flex items-center gap-2 gradient-violet text-white text-sm font-semibold px-5 py-2 rounded-xl hover:scale-105 transition-all"
+              className="flex items-center gap-2 gradient-orange text-white text-sm font-semibold px-5 py-2 rounded-xl hover:scale-105 transition-all"
             >
-              Save & Next <ChevronRight size={16} />
+              Save &amp; Next <ChevronRight size={16} />
             </button>
           </div>
         </div>
@@ -137,35 +138,39 @@ export default function TestEngine({ test, questions }: Props) {
           currentIdx={currentIdx}
           onJump={setCurrentIdx}
         />
+
         {/* Summary */}
-        <div className="glass rounded-xl p-4 space-y-2 text-sm">
+        <div className="bg-white rounded-xl p-4 space-y-2 text-sm" style={cardStyle}>
           {[
             { label: "Answered", count: answeredCount, color: "#10b981" },
             { label: "Marked", count: markedCount, color: "#f59e0b" },
             { label: "Unvisited", count: questions.length - answeredCount - markedCount, color: "#64748b" },
             { label: "Not Answered", count: questions.length - answeredCount, color: "#ef4444" },
           ].map(({ label, count, color }) => (
-            <div key={label} className="flex justify-between">
-              <span style={{ color }} className="font-medium">{label}</span>
-              <span className="text-white font-semibold">{count}</span>
+            <div key={label} className="flex justify-between items-center">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: color }} />
+                <span className="text-slate-600 font-medium">{label}</span>
+              </div>
+              <span className="text-slate-900 font-bold">{count}</span>
             </div>
           ))}
         </div>
 
         {/* Student + Submit */}
-        <div className="glass rounded-xl p-4">
+        <div className="bg-white rounded-xl p-4" style={cardStyle}>
           <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 gradient-violet rounded-full flex items-center justify-center text-white text-xs font-bold">
+            <div className="w-8 h-8 gradient-orange rounded-full flex items-center justify-center text-white text-xs font-bold shadow-sm shadow-amber-500/20">
               R
             </div>
             <div>
-              <p className="text-sm text-white font-medium">Rahat Ahmed</p>
-              <p className="text-xs text-[#94a3b8]">Level: Grandmaster</p>
+              <p className="text-sm text-slate-900 font-semibold">Rahat Ahmed</p>
+              <p className="text-xs text-slate-400">Level: Grandmaster</p>
             </div>
           </div>
           <button
             onClick={handleSubmit}
-            className="w-full gradient-violet glow-violet text-white font-bold py-3 rounded-xl hover:scale-[1.02] transition-all text-sm tracking-wide"
+            className="w-full gradient-orange glow-orange text-white font-bold py-3 rounded-xl hover:scale-[1.02] transition-all text-sm tracking-wide"
           >
             FINAL SUBMIT
           </button>

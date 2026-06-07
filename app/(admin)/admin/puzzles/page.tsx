@@ -45,8 +45,8 @@ const difficulties: Difficulty[] = ["Beginner", "Intermediate", "Advanced", "Eli
 const tiers: Tier[] = ["Beginner", "Intermediate", "Advanced"];
 const topics = ["Algebra", "Combinatorics", "Number Theory", "Geometry", "Inequalities", "Mathematical Logic"];
 
-const diffColors: Record<string, string> = { Beginner: "#10b981", Intermediate: "#f59e0b", Advanced: "#7c3aed", Elite: "#ef4444" };
-const tierColors: Record<Tier, string> = { Beginner: "#10b981", Intermediate: "#f59e0b", Advanced: "#7c3aed" };
+const diffColors: Record<string, string> = { Beginner: "#10b981", Intermediate: "#f59e0b", Advanced: "#d97706", Elite: "#ef4444" };
+const tierColors: Record<Tier, string> = { Beginner: "#10b981", Intermediate: "#f59e0b", Advanced: "#d97706" };
 
 const blank = (): Omit<PuzzleItem, "id"> => ({
   date: new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }),
@@ -95,7 +95,7 @@ export default function AdminPuzzlesPage() {
           <p className="text-[#94a3b8] text-sm mt-1">Manage daily challenge puzzles and view student submissions.</p>
         </div>
         {tab === "puzzles" && (
-          <button onClick={openCreate} className="flex items-center gap-2 gradient-violet glow-violet text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:scale-105 transition-all">
+          <button onClick={openCreate} className="flex items-center gap-2 gradient-orange glow-orange text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:scale-105 transition-all">
             <Plus size={16} /> New Puzzle
           </button>
         )}
@@ -107,7 +107,7 @@ export default function AdminPuzzlesPage() {
           <button
             key={t}
             onClick={() => setTab(t)}
-            className={`px-5 py-2 rounded-lg text-sm font-medium transition-all capitalize ${tab === t ? "gradient-violet text-white" : "text-[#94a3b8] hover:text-white"}`}
+            className={`px-5 py-2 rounded-lg text-sm font-medium transition-all capitalize ${tab === t ? "gradient-orange text-white" : "text-[#94a3b8] hover:text-white"}`}
           >
             {t === "puzzles" ? `Puzzles (${puzzles.length})` : `Submissions (${submissions.length})`}
           </button>
@@ -118,7 +118,7 @@ export default function AdminPuzzlesPage() {
       {tab === "puzzles" && (
         <>
           {showForm && (
-            <div className="glass rounded-2xl p-6 border border-[#7c3aed]/30 space-y-4">
+            <div className="glass rounded-2xl p-6 border border-[#d97706]/30 space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="font-heading font-semibold text-white">{editId ? "Edit Puzzle" : "New Puzzle"}</h3>
                 <button onClick={() => setShowForm(false)} className="text-[#64748b] hover:text-white transition-colors"><X size={18} /></button>
@@ -126,40 +126,40 @@ export default function AdminPuzzlesPage() {
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Title</label>
-                  <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Puzzle title..." className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all" />
+                  <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Puzzle title..." className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/50 transition-all" />
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Date</label>
-                  <input value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50 transition-all" />
+                  <input value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#d97706]/50 transition-all" />
                 </div>
               </div>
               <div className="space-y-1.5">
                 <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Problem Statement</label>
-                <textarea value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} rows={4} placeholder="Enter the full problem statement..." className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all resize-none" />
+                <textarea value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} rows={4} placeholder="Enter the full problem statement..." className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/50 transition-all resize-none" />
               </div>
               <div className="grid sm:grid-cols-3 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Difficulty</label>
-                  <select value={form.difficulty} onChange={(e) => setForm({ ...form, difficulty: e.target.value as Difficulty })} className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50 transition-all">
+                  <select value={form.difficulty} onChange={(e) => setForm({ ...form, difficulty: e.target.value as Difficulty })} className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#d97706]/50 transition-all">
                     {difficulties.map((d) => <option key={d} value={d} className="bg-[#0f0f1a]">{d}</option>)}
                   </select>
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Tier</label>
-                  <select value={form.tier} onChange={(e) => setForm({ ...form, tier: e.target.value as Tier })} className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50 transition-all">
+                  <select value={form.tier} onChange={(e) => setForm({ ...form, tier: e.target.value as Tier })} className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#d97706]/50 transition-all">
                     {tiers.map((t) => <option key={t} value={t} className="bg-[#0f0f1a]">{t}</option>)}
                   </select>
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Topic</label>
-                  <select value={form.topic} onChange={(e) => setForm({ ...form, topic: e.target.value })} className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50 transition-all">
+                  <select value={form.topic} onChange={(e) => setForm({ ...form, topic: e.target.value })} className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#d97706]/50 transition-all">
                     {topics.map((t) => <option key={t} value={t} className="bg-[#0f0f1a]">{t}</option>)}
                   </select>
                 </div>
               </div>
               <div className="flex gap-3 justify-end">
                 <button onClick={() => setShowForm(false)} className="px-5 py-2 rounded-xl text-sm text-[#94a3b8] hover:text-white transition-colors">Cancel</button>
-                <button onClick={save} disabled={!form.title.trim() || !form.content.trim()} className="flex items-center gap-2 gradient-violet text-white text-sm font-semibold px-5 py-2 rounded-xl hover:scale-105 transition-all disabled:opacity-50 disabled:scale-100">
+                <button onClick={save} disabled={!form.title.trim() || !form.content.trim()} className="flex items-center gap-2 gradient-orange text-white text-sm font-semibold px-5 py-2 rounded-xl hover:scale-105 transition-all disabled:opacity-50 disabled:scale-100">
                   <Check size={15} /> {editId ? "Save Changes" : "Create Puzzle"}
                 </button>
               </div>
@@ -191,7 +191,7 @@ export default function AdminPuzzlesPage() {
                   <p className="text-sm text-[#64748b] leading-relaxed line-clamp-2">{p.content}</p>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
-                  <button onClick={() => openEdit(p)} className="p-2 rounded-lg text-[#64748b] hover:text-[#a78bfa] hover:bg-[#7c3aed]/10 transition-colors"><Pencil size={15} /></button>
+                  <button onClick={() => openEdit(p)} className="p-2 rounded-lg text-[#64748b] hover:text-[#a78bfa] hover:bg-[#d97706]/10 transition-colors"><Pencil size={15} /></button>
                   <button onClick={() => confirmDelete(p.id)} className="p-2 rounded-lg text-[#64748b] hover:text-red-400 hover:bg-red-500/10 transition-colors"><Trash2 size={15} /></button>
                 </div>
               </div>
@@ -237,7 +237,7 @@ export default function AdminPuzzlesPage() {
               <button
                 key={t}
                 onClick={() => setFilterTier(t)}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${filterTier === t ? (t === "All" ? "gradient-violet text-white" : "text-white") : "bg-white/[0.06] text-[#94a3b8] hover:text-white"}`}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${filterTier === t ? (t === "All" ? "gradient-orange text-white" : "text-white") : "bg-white/[0.06] text-[#94a3b8] hover:text-white"}`}
                 style={filterTier === t && t !== "All" ? { backgroundColor: tierColors[t as Tier] } : {}}
               >
                 {t}
@@ -269,7 +269,7 @@ export default function AdminPuzzlesPage() {
                     <p className="text-xs text-[#94a3b8] mt-1">Puzzle: <span className="text-white">{s.puzzleTitle}</span></p>
                     <p className="text-xs text-[#64748b] mt-1 line-clamp-1">{s.answer}</p>
                   </div>
-                  <button onClick={() => setViewSub(s)} className="p-2 rounded-lg text-[#64748b] hover:text-[#a78bfa] hover:bg-[#7c3aed]/10 transition-colors shrink-0">
+                  <button onClick={() => setViewSub(s)} className="p-2 rounded-lg text-[#64748b] hover:text-[#a78bfa] hover:bg-[#d97706]/10 transition-colors shrink-0">
                     <Eye size={15} />
                   </button>
                 </div>

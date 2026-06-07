@@ -16,7 +16,7 @@ const tierColors: Record<Tier | "All", string> = {
   All: "#a78bfa",
   Beginner: "#10b981",
   Intermediate: "#f59e0b",
-  Advanced: "#7c3aed",
+  Advanced: "#d97706",
 };
 
 const tiers: (Tier | "All")[] = ["All", "Beginner", "Intermediate", "Advanced"];
@@ -85,7 +85,7 @@ export default function AdminNoticesPage() {
         </div>
         <button
           onClick={openAdd}
-          className="flex items-center gap-2 gradient-violet glow-violet text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:scale-105 transition-all"
+          className="flex items-center gap-2 gradient-orange glow-orange text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:scale-105 transition-all"
         >
           <Plus size={15} /> New Notice
         </button>
@@ -109,7 +109,7 @@ export default function AdminNoticesPage() {
 
       {/* Add/Edit form */}
       {showForm && (
-        <div className="glass rounded-2xl p-5 border border-[#7c3aed]/30 space-y-4">
+        <div className="glass rounded-2xl p-5 border border-[#d97706]/30 space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="font-heading font-semibold text-white text-sm">
               {editId ? "Edit Notice" : "New Notice"}
@@ -124,14 +124,14 @@ export default function AdminNoticesPage() {
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
               placeholder="Notice title"
-              className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all"
+              className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/50 transition-all"
             />
             <textarea
               value={form.body}
               onChange={(e) => setForm({ ...form, body: e.target.value })}
               placeholder="Notice body / details..."
               rows={4}
-              className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all resize-none"
+              className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/50 transition-all resize-none"
             />
             <div className="flex flex-wrap gap-3">
               <div className="flex-1 min-w-36">
@@ -139,7 +139,7 @@ export default function AdminNoticesPage() {
                 <select
                   value={form.tier}
                   onChange={(e) => setForm({ ...form, tier: e.target.value as Tier | "All" })}
-                  className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-[#7c3aed]/50 transition-all"
+                  className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-[#d97706]/50 transition-all"
                 >
                   {tiers.map((t) => <option key={t} value={t}>{t}</option>)}
                 </select>
@@ -149,7 +149,7 @@ export default function AdminNoticesPage() {
                 <select
                   value={form.priority}
                   onChange={(e) => setForm({ ...form, priority: e.target.value as Notice["priority"] })}
-                  className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-[#7c3aed]/50 transition-all"
+                  className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-[#d97706]/50 transition-all"
                 >
                   <option value="high">Important</option>
                   <option value="normal">Normal</option>
@@ -166,7 +166,7 @@ export default function AdminNoticesPage() {
             <button
               onClick={save}
               disabled={!form.title.trim() || !form.body.trim()}
-              className="px-5 py-2 rounded-xl text-sm font-semibold gradient-violet text-white disabled:opacity-40 transition-all hover:scale-105 disabled:hover:scale-100"
+              className="px-5 py-2 rounded-xl text-sm font-semibold gradient-orange text-white disabled:opacity-40 transition-all hover:scale-105 disabled:hover:scale-100"
             >
               {editId ? "Save Changes" : "Post Notice"}
             </button>
@@ -224,7 +224,7 @@ export default function AdminNoticesPage() {
 
                 {/* Actions */}
                 <div className="flex items-center gap-1 shrink-0">
-                  <button onClick={() => openEdit(notice)} className="p-1.5 rounded-lg text-[#64748b] hover:text-[#a78bfa] hover:bg-[#7c3aed]/10 transition-colors">
+                  <button onClick={() => openEdit(notice)} className="p-1.5 rounded-lg text-[#64748b] hover:text-[#a78bfa] hover:bg-[#d97706]/10 transition-colors">
                     <Pencil size={13} />
                   </button>
                   <button onClick={() => setDeleteId(notice.id)} className="p-1.5 rounded-lg text-[#64748b] hover:text-red-400 hover:bg-red-500/10 transition-colors">

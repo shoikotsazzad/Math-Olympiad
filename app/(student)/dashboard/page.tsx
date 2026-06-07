@@ -12,7 +12,7 @@ import type { Tier } from "@/types";
 const tierColors: Record<Tier, string> = {
   Beginner: "#10b981",
   Intermediate: "#f59e0b",
-  Advanced: "#7c3aed",
+  Advanced: "#d97706",
 };
 
 export default function DashboardPage() {
@@ -40,14 +40,14 @@ export default function DashboardPage() {
               <span className="text-xs text-[#64748b]">{user.institute}</span>
             )}
           </div>
-          <h1 className="font-heading text-3xl font-bold text-white">
+          <h1 className="font-heading text-3xl font-bold text-slate-900">
             Welcome back, {user?.name ?? "Scholar"}.
           </h1>
-          <p className="text-[#94a3b8] text-sm mt-1">
+          <p className="text-slate-500 text-sm mt-1">
             Your intellectual journey continues. You are in the top 2% this week.
           </p>
         </div>
-        <button className="gradient-violet glow-violet text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:scale-105 transition-all">
+        <button className="gradient-orange glow-orange text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:scale-105 transition-all">
           Start Daily Challenge
         </button>
       </div>

@@ -33,14 +33,14 @@ export default function AdminLoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#080810] px-4 py-12">
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[350px] rounded-full bg-[#7c3aed]/10 blur-[120px]" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[350px] rounded-full bg-[#d97706]/10 blur-[120px]" />
       </div>
 
       <div className="relative w-full max-w-sm">
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="w-10 h-10 gradient-violet rounded-xl flex items-center justify-center text-white font-bold font-heading">
+            <div className="w-10 h-10 gradient-orange rounded-xl flex items-center justify-center text-white font-bold font-heading">
               Σ
             </div>
             <span className="font-heading font-bold text-white tracking-wide text-base uppercase">
@@ -55,8 +55,8 @@ export default function AdminLoginPage() {
         </div>
 
         {/* Card */}
-        <div className="rounded-2xl bg-[#0d0d1a] border border-[#7c3aed]/20 p-7 space-y-4">
-          <div className="flex items-start gap-2.5 bg-[#7c3aed]/10 border border-[#7c3aed]/20 rounded-xl px-4 py-3">
+        <div className="rounded-2xl bg-[#0d0d1a] border border-[#d97706]/20 p-7 space-y-4">
+          <div className="flex items-start gap-2.5 bg-[#d97706]/10 border border-[#d97706]/20 rounded-xl px-4 py-3">
             <Shield size={13} className="text-[#a78bfa] mt-0.5 shrink-0" />
             <div>
               <p className="text-xs font-semibold text-[#a78bfa]">Demo Credentials</p>
@@ -74,7 +74,7 @@ export default function AdminLoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@uiu.ac.bd"
-                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/60 transition-all"
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/60 transition-all"
                 />
               </div>
             </div>
@@ -88,7 +88,7 @@ export default function AdminLoginPage() {
                   value={pass}
                   onChange={(e) => setPass(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-11 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/60 transition-all"
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-11 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/60 transition-all"
                 />
                 <button
                   type="button"
@@ -110,7 +110,7 @@ export default function AdminLoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full gradient-violet glow-violet text-white font-semibold py-3 rounded-xl hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-60 disabled:scale-100 text-sm"
+              className="w-full gradient-orange glow-orange text-white font-semibold py-3 rounded-xl hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-60 disabled:scale-100 text-sm"
             >
               {loading ? "Verifying…" : "Access Admin Portal"}
             </button>

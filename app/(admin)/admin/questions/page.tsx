@@ -9,8 +9,8 @@ type Difficulty = "Beginner" | "Intermediate" | "Advanced" | "Elite";
 const difficulties: Difficulty[] = ["Beginner", "Intermediate", "Advanced", "Elite"];
 const tiers: Tier[] = ["Beginner", "Intermediate", "Advanced"];
 const topicList = ["algebra", "combinatorics", "number-theory", "geometry", "inequalities", "mathematical-logic"];
-const diffColors: Record<string, string> = { Beginner: "#10b981", Intermediate: "#f59e0b", Advanced: "#7c3aed", Elite: "#ef4444" };
-const tierColors: Record<Tier, string> = { Beginner: "#10b981", Intermediate: "#f59e0b", Advanced: "#7c3aed" };
+const diffColors: Record<string, string> = { Beginner: "#10b981", Intermediate: "#f59e0b", Advanced: "#d97706", Elite: "#ef4444" };
+const tierColors: Record<Tier, string> = { Beginner: "#10b981", Intermediate: "#f59e0b", Advanced: "#d97706" };
 
 const blankQ = (): Omit<Question, "id"> => ({
   content: "", options: ["", "", "", ""], correctOption: 0, explanation: "", topicId: "number-theory", difficulty: "Intermediate", tier: "Beginner",
@@ -63,9 +63,9 @@ export default function AdminQuestionsPage() {
           <div className="relative">
             <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#64748b]" />
             <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search questions..."
-              className="bg-white/[0.06] border border-white/[0.08] rounded-xl pl-9 pr-4 py-2 text-sm text-[#94a3b8] placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 w-48 transition-all" />
+              className="bg-white/[0.06] border border-white/[0.08] rounded-xl pl-9 pr-4 py-2 text-sm text-[#94a3b8] placeholder-[#475569] outline-none focus:border-[#d97706]/50 w-48 transition-all" />
           </div>
-          <button onClick={openCreate} className="flex items-center gap-2 gradient-violet glow-violet text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:scale-105 transition-all">
+          <button onClick={openCreate} className="flex items-center gap-2 gradient-orange glow-orange text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:scale-105 transition-all">
             <Plus size={16} /> Add Question
           </button>
         </div>
@@ -73,7 +73,7 @@ export default function AdminQuestionsPage() {
 
       {/* Form */}
       {showForm && (
-        <div className="glass rounded-2xl p-6 border border-[#7c3aed]/30 space-y-4">
+        <div className="glass rounded-2xl p-6 border border-[#d97706]/30 space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="font-heading font-semibold text-white">{editId ? "Edit Question" : "New Question"}</h3>
             <button onClick={() => setShowForm(false)} className="text-[#64748b] hover:text-white"><X size={18} /></button>
@@ -83,7 +83,7 @@ export default function AdminQuestionsPage() {
             <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Problem Statement</label>
             <textarea value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })}
               rows={3} placeholder="Question content (LaTeX supported with $...$ syntax)..."
-              className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all resize-none" />
+              className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/50 transition-all resize-none" />
           </div>
 
           <div className="space-y-2">
@@ -92,12 +92,12 @@ export default function AdminQuestionsPage() {
               {form.options.map((opt, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <button onClick={() => setForm({ ...form, correctOption: i })}
-                    className={`w-6 h-6 rounded-full border-2 shrink-0 flex items-center justify-center transition-all ${form.correctOption === i ? "bg-[#10b981] border-[#10b981]" : "border-white/[0.2] hover:border-[#7c3aed]"}`}>
+                    className={`w-6 h-6 rounded-full border-2 shrink-0 flex items-center justify-center transition-all ${form.correctOption === i ? "bg-[#10b981] border-[#10b981]" : "border-white/[0.2] hover:border-[#d97706]"}`}>
                     {form.correctOption === i && <Check size={12} className="text-white" />}
                   </button>
                   <input value={opt} onChange={(e) => setOption(i, e.target.value)}
                     placeholder={`Option ${String.fromCharCode(65 + i)}`}
-                    className="flex-1 bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all" />
+                    className="flex-1 bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/50 transition-all" />
                 </div>
               ))}
             </div>
@@ -107,28 +107,28 @@ export default function AdminQuestionsPage() {
             <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Explanation</label>
             <textarea value={form.explanation} onChange={(e) => setForm({ ...form, explanation: e.target.value })}
               rows={2} placeholder="Explain the correct answer..."
-              className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all resize-none" />
+              className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/50 transition-all resize-none" />
           </div>
 
           <div className="grid sm:grid-cols-3 gap-4">
             <div className="space-y-1.5">
               <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Topic</label>
               <select value={form.topicId} onChange={(e) => setForm({ ...form, topicId: e.target.value })}
-                className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50">
+                className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#d97706]/50">
                 {topicList.map((t) => <option key={t} value={t} className="bg-[#0f0f1a]">{t.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}</option>)}
               </select>
             </div>
             <div className="space-y-1.5">
               <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Difficulty</label>
               <select value={form.difficulty} onChange={(e) => setForm({ ...form, difficulty: e.target.value as Difficulty })}
-                className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50">
+                className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#d97706]/50">
                 {difficulties.map((d) => <option key={d} value={d} className="bg-[#0f0f1a]">{d}</option>)}
               </select>
             </div>
             <div className="space-y-1.5">
               <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Tier</label>
               <select value={form.tier} onChange={(e) => setForm({ ...form, tier: e.target.value as Tier })}
-                className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50">
+                className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#d97706]/50">
                 {tiers.map((t) => <option key={t} value={t} className="bg-[#0f0f1a]">{t}</option>)}
               </select>
             </div>
@@ -137,7 +137,7 @@ export default function AdminQuestionsPage() {
           <div className="flex gap-3 justify-end">
             <button onClick={() => setShowForm(false)} className="px-5 py-2 rounded-xl text-sm text-[#94a3b8] hover:text-white transition-colors">Cancel</button>
             <button onClick={save} disabled={!form.content.trim()}
-              className="flex items-center gap-2 gradient-violet text-white text-sm font-semibold px-5 py-2 rounded-xl hover:scale-105 transition-all disabled:opacity-50 disabled:scale-100">
+              className="flex items-center gap-2 gradient-orange text-white text-sm font-semibold px-5 py-2 rounded-xl hover:scale-105 transition-all disabled:opacity-50 disabled:scale-100">
               <Check size={15} /> {editId ? "Save Changes" : "Add Question"}
             </button>
           </div>
@@ -187,7 +187,7 @@ export default function AdminQuestionsPage() {
                 </td>
                 <td className="py-3.5 px-6">
                   <div className="flex items-center gap-2 justify-end">
-                    <button onClick={() => openEdit(q)} className="p-1.5 rounded-lg text-[#64748b] hover:text-[#a78bfa] hover:bg-[#7c3aed]/10 transition-colors"><Pencil size={14} /></button>
+                    <button onClick={() => openEdit(q)} className="p-1.5 rounded-lg text-[#64748b] hover:text-[#a78bfa] hover:bg-[#d97706]/10 transition-colors"><Pencil size={14} /></button>
                     <button onClick={() => setDeleteId(q.id)} className="p-1.5 rounded-lg text-[#64748b] hover:text-red-400 hover:bg-red-500/10 transition-colors"><Trash2 size={14} /></button>
                   </div>
                 </td>

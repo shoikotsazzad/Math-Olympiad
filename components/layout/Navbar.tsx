@@ -11,8 +11,8 @@ const navLinks = [
   { label: "Practice", href: "/tests", protected: true },
   { label: "Live Exam", href: "/live-exam", protected: true },
   { label: "Olympiads", href: "/events", protected: false },
-  { label: "Leaderboard", href: "/leaderboard", protected: false },
-  { label: "Resources", href: "/topics", protected: false },
+  { label: "Hall of Fame", href: "/hall-of-fame", protected: false },
+  { label: "Resources", href: "/resources", protected: false },
   { label: "About", href: "/about", protected: false },
 ];
 
@@ -43,19 +43,19 @@ export default function Navbar() {
   const authUser = mounted ? user : null;
 
   return (
-    <header className="sticky top-0 z-50 glass border-b border-white/[0.06]">
+    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
       <div className="max-w-screen-xl mx-auto px-6 h-16 flex items-center gap-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 shrink-0">
-          <div className="w-9 h-9 shrink-0 rounded-full overflow-hidden ring-2 ring-[#7c3aed]/60 shadow-md shadow-[#7c3aed]/30">
+          <div className="w-9 h-9 shrink-0 rounded-full overflow-hidden ring-2 ring-[#d97706]/40 shadow-md shadow-[#d97706]/15">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/logo.png" alt="UIU CMOR" className="w-full h-full object-cover" />
           </div>
           <div className="hidden sm:flex flex-col leading-tight">
-            <span className="font-heading font-bold text-white tracking-wide text-xs uppercase">
+            <span className="font-heading font-bold text-slate-800 tracking-wide text-xs uppercase">
               UIU Centre For
             </span>
-            <span className="font-heading font-semibold text-[#a78bfa] tracking-wide text-[10px] uppercase">
+            <span className="font-heading font-semibold text-[#d97706] tracking-wide text-[10px] uppercase">
               Math Olympiad and Research
             </span>
           </div>
@@ -73,16 +73,16 @@ export default function Navbar() {
                 className={cn(
                   "px-4 py-2 rounded-lg text-sm font-medium transition-colors relative group flex items-center gap-1.5",
                   isActive
-                    ? "text-white bg-white/[0.08]"
-                    : "text-[#94a3b8] hover:text-white hover:bg-white/[0.05]"
+                    ? "text-[#d97706] bg-[#d97706]/8"
+                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
                 )}
               >
                 {link.label}
                 {isLocked && (
-                  <Lock size={11} className="text-[#64748b] group-hover:text-[#a78bfa] transition-colors" />
+                  <Lock size={11} className="text-slate-400 group-hover:text-[#d97706] transition-colors" />
                 )}
                 {isActive && (
-                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-[#7c3aed] rounded-full" />
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-[#d97706] rounded-full" />
                 )}
               </Link>
             );
@@ -92,16 +92,16 @@ export default function Navbar() {
         {/* Right side */}
         <div className="ml-auto flex items-center gap-3">
           {/* Search */}
-          <div className="hidden lg:flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-lg px-3 py-2 w-48">
-            <Search size={14} className="text-[#94a3b8]" />
+          <div className="hidden lg:flex items-center gap-2 bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 w-48">
+            <Search size={14} className="text-slate-400" />
             <input
               placeholder="Search resources..."
-              className="bg-transparent text-sm text-[#94a3b8] placeholder-[#64748b] outline-none w-full"
+              className="bg-transparent text-sm text-slate-600 placeholder-slate-400 outline-none w-full"
             />
           </div>
 
           {authUser && (
-            <button className="w-9 h-9 flex items-center justify-center rounded-lg bg-white/[0.06] hover:bg-white/[0.1] transition-colors text-[#94a3b8] hover:text-white">
+            <button className="w-9 h-9 flex items-center justify-center rounded-lg bg-slate-100 hover:bg-slate-200 transition-colors text-slate-500 hover:text-slate-700">
               <Bell size={16} />
             </button>
           )}
@@ -109,7 +109,7 @@ export default function Navbar() {
           {!authUser && (
             <Link
               href="/login"
-              className="gradient-violet glow-violet text-white text-sm font-semibold px-5 py-2 rounded-full hover:scale-105 transition-all"
+              className="gradient-orange glow-orange text-white text-sm font-semibold px-5 py-2 rounded-full hover:scale-105 transition-all"
             >
               Sign In
             </Link>
@@ -119,25 +119,25 @@ export default function Navbar() {
             <div className="relative" ref={ref}>
               <button
                 onClick={() => setOpen((v) => !v)}
-                className="flex items-center gap-2 bg-white/[0.06] hover:bg-white/[0.1] transition-colors rounded-lg px-3 py-1.5"
+                className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 transition-colors rounded-lg px-3 py-1.5"
               >
-                <div className="w-7 h-7 gradient-violet rounded-full flex items-center justify-center text-white text-xs font-bold">
+                <div className="w-7 h-7 gradient-orange rounded-full flex items-center justify-center text-white text-xs font-bold">
                   {authUser.name[0]}
                 </div>
-                <span className="text-sm text-white hidden sm:block">{authUser.name.split(" ")[0]}</span>
+                <span className="text-sm text-slate-700 hidden sm:block">{authUser.name.split(" ")[0]}</span>
                 <ChevronDown
                   size={14}
-                  className={cn("text-[#94a3b8] transition-transform", open && "rotate-180")}
+                  className={cn("text-slate-400 transition-transform", open && "rotate-180")}
                 />
               </button>
 
               {open && (
-                <div className="absolute right-0 top-full mt-2 w-56 rounded-xl bg-[#13131f] border border-white/[0.1] shadow-2xl overflow-hidden z-50">
+                <div className="absolute right-0 top-full mt-2 w-56 rounded-xl bg-white border border-slate-200 shadow-xl overflow-hidden z-50">
                   {/* User info */}
-                  <div className="px-4 py-3 border-b border-white/[0.08]">
-                    <p className="text-sm font-medium text-white">{authUser.name}</p>
-                    <p className="text-xs text-[#64748b] mt-0.5">{authUser.email}</p>
-                    <span className="inline-flex mt-1.5 items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#7c3aed]/20 text-[#a78bfa]">
+                  <div className="px-4 py-3 border-b border-slate-100">
+                    <p className="text-sm font-medium text-slate-900">{authUser.name}</p>
+                    <p className="text-xs text-slate-400 mt-0.5">{authUser.email}</p>
+                    <span className="inline-flex mt-1.5 items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#d97706]/10 text-[#d97706]">
                       {authUser.role === "ADMIN" ? "Faculty Admin" : `${authUser.level} · ${authUser.tier ?? authUser.department}`}
                     </span>
                   </div>
@@ -149,7 +149,7 @@ export default function Navbar() {
                         <Link
                           href="/dashboard"
                           onClick={() => setOpen(false)}
-                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-[#94a3b8] hover:text-white hover:bg-white/[0.05] transition-colors"
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors"
                         >
                           <LayoutDashboard size={15} />
                           My Dashboard
@@ -157,7 +157,7 @@ export default function Navbar() {
                         <Link
                           href="/profile"
                           onClick={() => setOpen(false)}
-                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-[#94a3b8] hover:text-white hover:bg-white/[0.05] transition-colors"
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors"
                         >
                           <User size={15} />
                           My Profile
@@ -168,7 +168,7 @@ export default function Navbar() {
                         <Link
                           href="/admin/dashboard"
                           onClick={() => setOpen(false)}
-                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-[#94a3b8] hover:text-white hover:bg-white/[0.05] transition-colors"
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors"
                         >
                           <LayoutDashboard size={15} />
                           Admin Dashboard
@@ -176,7 +176,7 @@ export default function Navbar() {
                         <Link
                           href="/admin/profile"
                           onClick={() => setOpen(false)}
-                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-[#94a3b8] hover:text-white hover:bg-white/[0.05] transition-colors"
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors"
                         >
                           <User size={15} />
                           Profile
@@ -186,10 +186,10 @@ export default function Navbar() {
                   </div>
 
                   {/* Sign out */}
-                  <div className="border-t border-white/[0.08] py-1">
+                  <div className="border-t border-slate-100 py-1">
                     <button
                       onClick={signOut}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors"
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:text-red-600 hover:bg-red-50 transition-colors"
                     >
                       <LogOut size={15} />
                       Sign Out

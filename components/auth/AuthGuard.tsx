@@ -22,7 +22,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   if (!ready || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#080810]">
-        <div className="w-8 h-8 rounded-full border-2 border-[#7c3aed] border-t-transparent animate-spin" />
+        <div className="w-8 h-8 rounded-full border-2 border-[#d97706] border-t-transparent animate-spin" />
       </div>
     );
   }
@@ -49,7 +49,7 @@ export function AdminGuard({ children }: { children: React.ReactNode }) {
   if (!ready || !user || user.role !== "ADMIN") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#080810]">
-        <div className="w-8 h-8 rounded-full border-2 border-[#7c3aed] border-t-transparent animate-spin" />
+        <div className="w-8 h-8 rounded-full border-2 border-[#d97706] border-t-transparent animate-spin" />
       </div>
     );
   }

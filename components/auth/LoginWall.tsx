@@ -24,8 +24,8 @@ export function LoginWall({ children, title = "Sign in to Access", description =
 
       {/* Overlay card */}
       <div className="absolute inset-0 flex items-center justify-center px-4">
-        <div className="bg-[#0d0d1a] border border-[#7c3aed]/35 rounded-2xl p-8 text-center max-w-sm w-full shadow-2xl">
-          <div className="w-11 h-11 rounded-xl bg-[#7c3aed]/20 border border-[#7c3aed]/30 flex items-center justify-center mx-auto mb-4">
+        <div className="bg-[#0d0d1a] border border-[#d97706]/35 rounded-2xl p-8 text-center max-w-sm w-full shadow-2xl">
+          <div className="w-11 h-11 rounded-xl bg-[#d97706]/20 border border-[#d97706]/30 flex items-center justify-center mx-auto mb-4">
             <Lock size={20} className="text-[#a78bfa]" />
           </div>
           <h3 className="font-heading font-bold text-white text-lg mb-2">{title}</h3>
@@ -33,7 +33,7 @@ export function LoginWall({ children, title = "Sign in to Access", description =
           <div className="flex gap-3 justify-center">
             <Link
               href="/login"
-              className="gradient-violet glow-violet text-white font-semibold px-6 py-2.5 rounded-full hover:scale-105 transition-all text-sm"
+              className="gradient-orange glow-orange text-white font-semibold px-6 py-2.5 rounded-full hover:scale-105 transition-all text-sm"
             >
               Sign In Free
             </Link>

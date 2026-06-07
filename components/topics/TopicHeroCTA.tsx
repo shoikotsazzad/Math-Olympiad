@@ -12,7 +12,7 @@ export function TopicHeroCTA({ firstModuleId }: { firstModuleId?: string }) {
         onClick={() => {
           document.getElementById("topic-syllabus")?.scrollIntoView({ behavior: "smooth" });
         }}
-        className="gradient-violet glow-violet text-white text-sm font-semibold px-5 py-2.5 rounded-xl hover:scale-105 transition-all"
+        className="gradient-orange glow-orange text-white text-sm font-semibold px-5 py-2.5 rounded-xl hover:scale-105 transition-all"
       >
         Start Learning
       </button>
@@ -22,7 +22,7 @@ export function TopicHeroCTA({ firstModuleId }: { firstModuleId?: string }) {
   return (
     <Link
       href="/login"
-      className="gradient-violet glow-violet text-white text-sm font-semibold px-5 py-2.5 rounded-xl hover:scale-105 transition-all"
+      className="gradient-orange glow-orange text-white text-sm font-semibold px-5 py-2.5 rounded-xl hover:scale-105 transition-all"
     >
       Sign In to Start Learning
     </Link>

@@ -13,7 +13,7 @@ type Tab = "signin" | "signup";
 const TIERS: { value: Tier; label: string; subtitle: string; color: string; border: string; bg: string }[] = [
   { value: "Beginner",     label: "Beginner",     subtitle: "School Level",           color: "#10b981", border: "border-[#10b981]/60", bg: "bg-[#10b981]/10" },
   { value: "Intermediate", label: "Intermediate", subtitle: "College Level",          color: "#f59e0b", border: "border-[#f59e0b]/60", bg: "bg-[#f59e0b]/10" },
-  { value: "Advanced",     label: "Advanced",     subtitle: "University & Above",     color: "#7c3aed", border: "border-[#7c3aed]/60", bg: "bg-[#7c3aed]/10" },
+  { value: "Advanced",     label: "Advanced",     subtitle: "University & Above",     color: "#d97706", border: "border-[#d97706]/60", bg: "bg-[#d97706]/10" },
 ];
 
 export default function LoginPage() {
@@ -88,14 +88,14 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#080810] px-4 py-12">
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-[#7c3aed]/15 blur-[120px]" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-[#d97706]/15 blur-[120px]" />
       </div>
 
       <div className="relative w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="w-10 h-10 gradient-violet rounded-xl flex items-center justify-center text-white font-bold text-base font-heading">
+            <div className="w-10 h-10 gradient-orange rounded-xl flex items-center justify-center text-white font-bold text-base font-heading">
               Σ
             </div>
             <span className="font-heading font-bold text-white tracking-wide text-base uppercase">
@@ -124,7 +124,7 @@ export default function LoginPage() {
               >
                 {t === "signin" ? "Sign In" : "Sign Up"}
                 {tab === t && (
-                  <span className="absolute bottom-0 left-0 right-0 h-0.5 gradient-violet" />
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 gradient-orange" />
                 )}
               </button>
             ))}
@@ -147,7 +147,7 @@ export default function LoginPage() {
                       value={siEmail}
                       onChange={(e) => setSiEmail(e.target.value)}
                       placeholder="you@gmail.com"
-                      className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/60 focus:bg-white/[0.06] transition-all"
+                      className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/60 focus:bg-white/[0.06] transition-all"
                     />
                   </div>
                 </div>
@@ -161,7 +161,7 @@ export default function LoginPage() {
                       value={siPass}
                       onChange={(e) => setSiPass(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-11 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/60 focus:bg-white/[0.06] transition-all"
+                      className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-11 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/60 focus:bg-white/[0.06] transition-all"
                     />
                     <button
                       type="button"
@@ -183,7 +183,7 @@ export default function LoginPage() {
                 <button
                   type="submit"
                   disabled={siLoading}
-                  className="w-full gradient-violet glow-violet text-white font-semibold py-3 rounded-xl hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-60 disabled:scale-100 text-sm mt-2"
+                  className="w-full gradient-orange glow-orange text-white font-semibold py-3 rounded-xl hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-60 disabled:scale-100 text-sm mt-2"
                 >
                   {siLoading ? "Signing in…" : "Sign In"}
                 </button>
@@ -208,7 +208,7 @@ export default function LoginPage() {
                         value={suName}
                         onChange={(e) => setSuName(e.target.value)}
                         placeholder="Your name"
-                        className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/60 transition-all"
+                        className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/60 transition-all"
                       />
                     </div>
                   </div>
@@ -221,7 +221,7 @@ export default function LoginPage() {
                         value={suInstitute}
                         onChange={(e) => setSuInstitute(e.target.value)}
                         placeholder="School / College / University"
-                        className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/60 transition-all"
+                        className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/60 transition-all"
                       />
                     </div>
                   </div>
@@ -267,7 +267,7 @@ export default function LoginPage() {
                       value={suEmail}
                       onChange={(e) => setSuEmail(e.target.value)}
                       placeholder="you@gmail.com"
-                      className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/60 transition-all"
+                      className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/60 transition-all"
                     />
                   </div>
                 </div>
@@ -283,7 +283,7 @@ export default function LoginPage() {
                         value={suPass}
                         onChange={(e) => setSuPass(e.target.value)}
                         placeholder="6+ characters"
-                        className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-11 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/60 transition-all"
+                        className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-11 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/60 transition-all"
                       />
                       <button
                         type="button"
@@ -303,7 +303,7 @@ export default function LoginPage() {
                         value={suConfirm}
                         onChange={(e) => setSuConfirm(e.target.value)}
                         placeholder="Repeat password"
-                        className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/60 transition-all"
+                        className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/60 transition-all"
                       />
                     </div>
                   </div>
@@ -319,7 +319,7 @@ export default function LoginPage() {
                 <button
                   type="submit"
                   disabled={suLoading}
-                  className="w-full gradient-violet glow-violet text-white font-semibold py-3 rounded-xl hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-60 disabled:scale-100 text-sm mt-2"
+                  className="w-full gradient-orange glow-orange text-white font-semibold py-3 rounded-xl hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-60 disabled:scale-100 text-sm mt-2"
                 >
                   {suLoading ? "Creating account…" : "Create Account"}
                 </button>

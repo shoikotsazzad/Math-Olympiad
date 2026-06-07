@@ -7,7 +7,7 @@ import type { Module, Lesson } from "@/types";
 const difficultyColors: Record<string, string> = {
   Beginner: "#10b981",
   Intermediate: "#f59e0b",
-  Advanced: "#7c3aed",
+  Advanced: "#d97706",
   Elite: "#ef4444",
 };
 

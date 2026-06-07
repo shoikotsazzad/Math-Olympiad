@@ -13,6 +13,10 @@ import {
   MessageSquare,
   Radio,
   Bell,
+  Trophy,
+  Dumbbell,
+  Images,
+  ClipboardList,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/authStore";
@@ -23,6 +27,7 @@ const studentLinks = [
   { icon: Radio, label: "Live Exam", href: "/live-exam" },
   { icon: FileText, label: "Tests", href: "/tests" },
   { icon: Sigma, label: "Topics", href: "/topics" },
+  { icon: Dumbbell, label: "Training", href: "/training" },
   { icon: Users, label: "Community", href: "/community" },
   { icon: Bell, label: "Notices", href: "/notices" },
 ];
@@ -36,6 +41,9 @@ const adminLinks = [
   { icon: BookOpen, label: "Topics", href: "/admin/topics" },
   { icon: MessageSquare, label: "Community", href: "/admin/community" },
   { icon: Shield, label: "Events", href: "/admin/events" },
+  { icon: ClipboardList, label: "Registration", href: "/admin/registration" },
+  { icon: Trophy, label: "Hall of Fame", href: "/admin/hall-of-fame" },
+  { icon: Images, label: "Gallery", href: "/admin/gallery" },
   { icon: Bell, label: "Notices", href: "/admin/notices" },
 ];
 
@@ -50,12 +58,12 @@ export default function Sidebar() {
       {/* User info (desktop only) */}
       {user && (
         <div className="hidden lg:flex items-center gap-3 px-3 py-3 mb-2">
-          <div className="w-9 h-9 gradient-violet rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0">
+          <div className="w-9 h-9 gradient-orange rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0">
             {user.name[0]}
           </div>
           <div className="min-w-0">
-            <p className="text-sm font-medium text-white truncate">{user.name}</p>
-            <p className="text-xs text-[#94a3b8] truncate">LEVEL: {user.level.toUpperCase()}</p>
+            <p className="text-sm font-semibold text-slate-800 truncate">{user.name}</p>
+            <p className="text-xs text-slate-500 truncate">LEVEL: {user.level.toUpperCase()}</p>
           </div>
         </div>
       )}
@@ -70,13 +78,13 @@ export default function Sidebar() {
             className={cn(
               "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all",
               isActive
-                ? "bg-[#7c3aed]/20 text-white border border-[#7c3aed]/30"
-                : "text-[#94a3b8] hover:bg-white/[0.05] hover:text-white"
+                ? "bg-[#d97706]/10 text-[#d97706] border border-[#d97706]/20"
+                : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
             )}
           >
             <Icon
               size={18}
-              className={cn("shrink-0", isActive ? "text-[#a78bfa]" : "text-[#64748b]")}
+              className={cn("shrink-0", isActive ? "text-[#d97706]" : "text-slate-400")}
             />
             <span className="hidden lg:block">{label}</span>
           </Link>
@@ -85,11 +93,11 @@ export default function Sidebar() {
 
       {/* XP / Streak (student only, desktop) */}
       {user?.role === "STUDENT" && (
-        <div className="hidden lg:block mt-auto mx-1 p-3 rounded-xl bg-white/[0.04] border border-white/[0.06]">
-          <p className="text-xs text-[#94a3b8] mb-1">CURRENT GOAL</p>
-          <p className="text-xs text-white font-medium">Qualify for National Math Olympiad</p>
-          <div className="mt-2 h-1 rounded-full bg-white/10">
-            <div className="h-1 rounded-full gradient-violet w-2/3" />
+        <div className="hidden lg:block mt-auto mx-1 p-3 rounded-xl bg-[#d97706]/5 border border-[#d97706]/10">
+          <p className="text-xs text-slate-400 font-semibold mb-1 uppercase tracking-wider">Current Goal</p>
+          <p className="text-xs text-slate-700 font-medium">Qualify for National Math Olympiad</p>
+          <div className="mt-2 h-1.5 rounded-full bg-slate-200">
+            <div className="h-1.5 rounded-full gradient-orange w-2/3" />
           </div>
         </div>
       )}

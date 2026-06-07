@@ -8,9 +8,15 @@ import { useEventsStore } from "@/store/eventsStore";
 import type { LiveExam, Tier } from "@/types";
 
 const tierColors: Record<Tier, string> = {
-  Beginner: "#10b981",
+  Beginner: "#d97706",
   Intermediate: "#f59e0b",
-  Advanced: "#7c3aed",
+  Advanced: "#b45309",
+};
+
+const cardStyle = {
+  background: "#fff",
+  border: "1px solid rgba(15,23,42,0.07)",
+  boxShadow: "0 2px 8px rgba(15,23,42,0.05), 0 0 0 1px rgba(15,23,42,0.03)",
 };
 
 function calcRemaining(scheduledAt: string): number {
@@ -56,51 +62,40 @@ function LiveExamCard({ exam }: { exam: LiveExam }) {
 
   return (
     <div
-      className="glass rounded-2xl p-6 space-y-5 border"
-      style={{ borderColor: isLive ? `${tierColor}50` : "rgba(255,255,255,0.06)" }}
+      className="bg-white rounded-2xl p-6 space-y-5"
+      style={{ ...cardStyle, borderColor: isLive ? `${tierColor}45` : "rgba(15,23,42,0.07)" }}
     >
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span
-              className="text-xs font-semibold px-2.5 py-0.5 rounded-full"
-              style={{ color: tierColor, backgroundColor: `${tierColor}18` }}
-            >
+            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full" style={{ color: tierColor, backgroundColor: `${tierColor}15` }}>
               {exam.tier}
             </span>
             {isLive && (
-              <span className="flex items-center gap-1.5 text-xs font-bold text-[#10b981] bg-[#10b981]/15 px-2.5 py-0.5 rounded-full">
+              <span className="flex items-center gap-1.5 text-xs font-bold text-[#10b981] bg-[#10b981]/12 px-2.5 py-0.5 rounded-full border border-[#10b981]/25">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse" />
                 LIVE
               </span>
             )}
             {isEnded && (
-              <span className="text-xs font-medium text-[#64748b] bg-white/[0.06] px-2.5 py-0.5 rounded-full">
-                Ended
-              </span>
+              <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">Ended</span>
             )}
           </div>
-          <h3 className="font-heading font-bold text-white text-lg">{exam.title}</h3>
-          <p className="text-sm text-[#94a3b8] mt-1">{exam.description}</p>
+          <h3 className="font-heading font-bold text-slate-900 text-lg">{exam.title}</h3>
+          <p className="text-sm text-slate-500 mt-1">{exam.description}</p>
         </div>
       </div>
 
-      <div className="flex items-center gap-4 text-xs text-[#94a3b8]">
-        <span className="flex items-center gap-1.5">
-          <Calendar size={12} /> {formatScheduled(exam.scheduledAt)}
-        </span>
-        <span className="flex items-center gap-1.5">
-          <Clock size={12} /> {exam.duration} min
-        </span>
-        <span className="flex items-center gap-1.5">
-          <BookOpen size={12} /> {exam.questionCount} questions
-        </span>
+      <div className="flex items-center gap-4 text-xs text-slate-500">
+        <span className="flex items-center gap-1.5"><Calendar size={12} /> {formatScheduled(exam.scheduledAt)}</span>
+        <span className="flex items-center gap-1.5"><Clock size={12} /> {exam.duration} min</span>
+        <span className="flex items-center gap-1.5"><BookOpen size={12} /> {exam.questionCount} questions</span>
       </div>
 
       {/* Countdown */}
       {!isEnded && !isLive && remaining > 0 && (
         <div>
-          <p className="text-xs text-[#64748b] uppercase tracking-wider mb-2">Starts in</p>
+          <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-2">Starts in</p>
           <div className="flex gap-2">
             {[
               { label: "Days", value: countdown.days },
@@ -108,13 +103,9 @@ function LiveExamCard({ exam }: { exam: LiveExam }) {
               { label: "Mins", value: countdown.mins },
               { label: "Secs", value: countdown.secs },
             ].map(({ label, value }) => (
-              <div
-                key={label}
-                className="flex-1 rounded-xl py-3 text-center border"
-                style={{ backgroundColor: `${tierColor}10`, borderColor: `${tierColor}30` }}
-              >
-                <p className="font-heading font-bold text-xl text-white">{value}</p>
-                <p className="text-[10px] text-[#64748b] mt-0.5 uppercase tracking-wider">{label}</p>
+              <div key={label} className="flex-1 rounded-xl py-3 text-center border" style={{ backgroundColor: `${tierColor}08`, borderColor: `${tierColor}25` }}>
+                <p className="font-heading font-bold text-xl text-slate-900">{value}</p>
+                <p className="text-[10px] text-slate-400 mt-0.5 uppercase tracking-wider font-semibold">{label}</p>
               </div>
             ))}
           </div>
@@ -131,17 +122,11 @@ function LiveExamCard({ exam }: { exam: LiveExam }) {
           Join Now — Exam is Live! <ChevronRight size={16} />
         </Link>
       ) : isEnded ? (
-        <button
-          disabled
-          className="w-full text-sm text-[#64748b] bg-white/[0.04] border border-white/[0.06] py-3 rounded-xl cursor-not-allowed"
-        >
+        <button disabled className="w-full text-sm text-slate-400 bg-slate-100 border border-slate-200 py-3 rounded-xl cursor-not-allowed">
           Exam Ended
         </button>
       ) : (
-        <button
-          disabled
-          className="w-full text-sm text-[#64748b] bg-white/[0.04] border border-white/[0.06] py-3 rounded-xl cursor-not-allowed"
-        >
+        <button disabled className="w-full text-sm text-slate-400 bg-slate-100 border border-slate-200 py-3 rounded-xl cursor-not-allowed">
           {exam.testId ? "Waiting for exam to start…" : "Questions not yet assigned"}
         </button>
       )}
@@ -157,30 +142,33 @@ export default function LiveExamPage() {
   const myExams = liveExams.filter((e) => e.tier === userTier);
   const upcoming = myExams.filter((e) => e.status === "upcoming" || e.status === "live");
   const ended = myExams.filter((e) => e.status === "ended");
+  const tierColor = tierColors[userTier];
 
   return (
     <div className="space-y-8">
-      {/* Header */}
-      <div className="glass rounded-2xl p-8 relative overflow-hidden">
+      {/* Header banner */}
+      <div
+        className="rounded-2xl p-8 relative overflow-hidden"
+        style={{
+          background: "linear-gradient(135deg, #d97706 0%, #b45309 100%)",
+          boxShadow: "0 8px 32px rgba(217,119,6,0.25)",
+        }}
+      >
         <div className="absolute inset-0 pointer-events-none">
-          <div
-            className="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl"
-            style={{ backgroundColor: `${tierColors[userTier]}15` }}
-          />
+          <div className="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl bg-white/10" />
+          <div className="absolute inset-0 opacity-[0.08]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
         </div>
         <div className="relative">
           <div className="flex items-center gap-2 mb-2">
-            <Radio size={16} style={{ color: tierColors[userTier] }} />
-            <p className="text-xs text-[#94a3b8] uppercase tracking-widest">Live Exams</p>
+            <Radio size={15} className="text-white/80" />
+            <p className="text-xs text-white/70 uppercase tracking-widest font-medium">Live Exams</p>
           </div>
           <h1 className="font-heading text-4xl font-extrabold text-white leading-tight">
-            Synchronized <span className="gradient-text">Tests</span>
+            Synchronized <span className="text-amber-100">Tests</span>
           </h1>
-          <p className="text-[#94a3b8] mt-2 text-sm">
+          <p className="text-white/75 mt-2 text-sm">
             Real-time competitive exams for{" "}
-            <span style={{ color: tierColors[userTier] }} className="font-semibold">
-              {userTier}
-            </span>{" "}
+            <span className="font-semibold text-white">{userTier}</span>{" "}
             students. All participants start at the same moment.
           </p>
         </div>
@@ -189,28 +177,22 @@ export default function LiveExamPage() {
       {/* Upcoming / Live */}
       {upcoming.length > 0 ? (
         <div className="space-y-4">
-          <h2 className="font-heading font-semibold text-white text-lg">Upcoming & Live</h2>
-          {upcoming.map((exam) => (
-            <LiveExamCard key={exam.id} exam={exam} />
-          ))}
+          <h2 className="font-heading font-semibold text-slate-900 text-lg">Upcoming &amp; Live</h2>
+          {upcoming.map((exam) => <LiveExamCard key={exam.id} exam={exam} />)}
         </div>
       ) : (
-        <div className="glass rounded-2xl p-12 text-center">
-          <Radio size={32} className="text-[#64748b] mx-auto mb-4" />
-          <h3 className="font-heading font-semibold text-white text-lg mb-2">No Upcoming Exams</h3>
-          <p className="text-sm text-[#94a3b8]">
-            No live exams scheduled for {userTier} students right now. Check back soon!
-          </p>
+        <div className="bg-white rounded-2xl p-12 text-center" style={cardStyle}>
+          <Radio size={32} className="text-slate-300 mx-auto mb-4" />
+          <h3 className="font-heading font-semibold text-slate-900 text-lg mb-2">No Upcoming Exams</h3>
+          <p className="text-sm text-slate-500">No live exams scheduled for {userTier} students right now. Check back soon!</p>
         </div>
       )}
 
       {/* Ended */}
       {ended.length > 0 && (
         <div className="space-y-4">
-          <h2 className="font-heading font-semibold text-[#64748b] text-lg">Past Exams</h2>
-          {ended.map((exam) => (
-            <LiveExamCard key={exam.id} exam={exam} />
-          ))}
+          <h2 className="font-heading font-semibold text-slate-500 text-lg">Past Exams</h2>
+          {ended.map((exam) => <LiveExamCard key={exam.id} exam={exam} />)}
         </div>
       )}
     </div>

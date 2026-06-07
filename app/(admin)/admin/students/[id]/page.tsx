@@ -13,12 +13,12 @@ import {
 const tierColors: Record<Tier, string> = {
   Beginner: "#10b981",
   Intermediate: "#f59e0b",
-  Advanced: "#7c3aed",
+  Advanced: "#d97706",
 };
 
 const levelColors: Record<string, string> = {
   Grandmaster: "#f59e0b",
-  "Prime Master": "#7c3aed",
+  "Prime Master": "#d97706",
   Expert: "#10b981",
   Advanced: "#3b82f6",
   Intermediate: "#0891b2",
@@ -93,7 +93,7 @@ export default function StudentDetailPage() {
 
   const results = generateTestResults(student);
   const topicProgress = generateTopicProgress(student);
-  const tierColor = tierColors[student.tier] ?? "#7c3aed";
+  const tierColor = tierColors[student.tier] ?? "#d97706";
   const levelColor = levelColors[student.level] ?? "#64748b";
   const circum = 2 * Math.PI * 40;
   const passed = results.filter((r) => r.passed).length;
@@ -117,7 +117,7 @@ export default function StudentDetailPage() {
           />
         </div>
         <div className="relative flex items-start gap-5 flex-wrap">
-          <div className="w-16 h-16 gradient-violet rounded-2xl flex items-center justify-center text-white font-bold text-2xl shrink-0">
+          <div className="w-16 h-16 gradient-orange rounded-2xl flex items-center justify-center text-white font-bold text-2xl shrink-0">
             {student.name[0]}
           </div>
           <div className="flex-1 min-w-0">

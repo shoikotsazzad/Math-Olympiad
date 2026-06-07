@@ -20,7 +20,7 @@ interface Post {
 
 const categories = ["Algebra", "Combinatorics", "Number Theory", "Geometry", "General"];
 const categoryColors: Record<string, string> = {
-  Algebra: "#7c3aed", Combinatorics: "#f59e0b", "Number Theory": "#10b981",
+  Algebra: "#d97706", Combinatorics: "#f59e0b", "Number Theory": "#10b981",
   Geometry: "#3b82f6", General: "#94a3b8",
 };
 
@@ -84,7 +84,7 @@ export default function AdminCommunityPage() {
           </h1>
           <p className="text-[#94a3b8] text-sm mt-1">Moderate discussions, pin announcements, and manage posts.</p>
         </div>
-        <button onClick={openCreate} className="flex items-center gap-2 gradient-violet glow-violet text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:scale-105 transition-all">
+        <button onClick={openCreate} className="flex items-center gap-2 gradient-orange glow-orange text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:scale-105 transition-all">
           <Plus size={16} /> New Post
         </button>
       </div>
@@ -94,12 +94,12 @@ export default function AdminCommunityPage() {
         <div className="relative">
           <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#64748b]" />
           <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search posts..."
-            className="bg-white/[0.06] border border-white/[0.08] rounded-xl pl-9 pr-4 py-2 text-sm text-[#94a3b8] placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 w-52 transition-all" />
+            className="bg-white/[0.06] border border-white/[0.08] rounded-xl pl-9 pr-4 py-2 text-sm text-[#94a3b8] placeholder-[#475569] outline-none focus:border-[#d97706]/50 w-52 transition-all" />
         </div>
         <div className="flex gap-2 flex-wrap">
           {["All", ...categories].map((c) => (
             <button key={c} onClick={() => setFilterCat(c)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${filterCat === c ? "gradient-violet text-white" : "bg-white/[0.06] text-[#94a3b8] hover:text-white hover:bg-white/[0.1]"}`}>
+              className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${filterCat === c ? "gradient-orange text-white" : "bg-white/[0.06] text-[#94a3b8] hover:text-white hover:bg-white/[0.1]"}`}>
               {c}
             </button>
           ))}
@@ -108,7 +108,7 @@ export default function AdminCommunityPage() {
 
       {/* Form */}
       {showForm && (
-        <div className="glass rounded-2xl p-6 border border-[#7c3aed]/30 space-y-4">
+        <div className="glass rounded-2xl p-6 border border-[#d97706]/30 space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="font-heading font-semibold text-white">{editId ? "Edit Post" : "New Post"}</h3>
             <button onClick={() => setShowForm(false)} className="text-[#64748b] hover:text-white"><X size={18} /></button>
@@ -117,33 +117,33 @@ export default function AdminCommunityPage() {
           <div className="space-y-1.5">
             <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Title</label>
             <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })}
-              placeholder="Post title..." className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all" />
+              placeholder="Post title..." className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/50 transition-all" />
           </div>
 
           <div className="space-y-1.5">
             <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Body</label>
             <textarea value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })}
               rows={3} placeholder="Post content..."
-              className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all resize-none" />
+              className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/50 transition-all resize-none" />
           </div>
 
           <div className="grid sm:grid-cols-3 gap-4">
             <div className="space-y-1.5">
               <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Category</label>
               <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}
-                className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50">
+                className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#d97706]/50">
                 {categories.map((c) => <option key={c} value={c} className="bg-[#0f0f1a]">{c}</option>)}
               </select>
             </div>
             <div className="space-y-1.5">
               <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Author Name</label>
               <input value={form.author} onChange={(e) => setForm({ ...form, author: e.target.value })}
-                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all" />
+                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/50 transition-all" />
             </div>
             <div className="space-y-1.5">
               <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Department</label>
               <input value={form.authorDept} onChange={(e) => setForm({ ...form, authorDept: e.target.value })}
-                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all" />
+                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/50 transition-all" />
             </div>
           </div>
 
@@ -153,13 +153,13 @@ export default function AdminCommunityPage() {
             <div className="flex gap-2">
               <input value={tagInput} onChange={(e) => setTagInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addTag())}
-                placeholder="Add tag and press Enter..." className="flex-1 bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all" />
+                placeholder="Add tag and press Enter..." className="flex-1 bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/50 transition-all" />
               <button type="button" onClick={addTag} className="px-4 py-2.5 bg-white/[0.06] border border-white/[0.08] rounded-xl text-sm text-[#94a3b8] hover:text-white transition-colors">Add</button>
             </div>
             {form.tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-2">
                 {form.tags.map((tag) => (
-                  <span key={tag} className="flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full bg-[#7c3aed]/15 text-[#a78bfa] border border-[#7c3aed]/20">
+                  <span key={tag} className="flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full bg-[#d97706]/15 text-[#a78bfa] border border-[#d97706]/20">
                     #{tag}
                     <button onClick={() => removeTag(tag)} className="text-[#64748b] hover:text-white"><X size={11} /></button>
                   </span>
@@ -170,13 +170,13 @@ export default function AdminCommunityPage() {
 
           <div className="flex items-center gap-3 justify-between">
             <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={form.pinned} onChange={(e) => setForm({ ...form, pinned: e.target.checked })} className="w-4 h-4 accent-[#7c3aed]" />
+              <input type="checkbox" checked={form.pinned} onChange={(e) => setForm({ ...form, pinned: e.target.checked })} className="w-4 h-4 accent-[#d97706]" />
               <span className="text-sm text-[#94a3b8]">Pin this post to top</span>
             </label>
             <div className="flex gap-3">
               <button onClick={() => setShowForm(false)} className="px-5 py-2 rounded-xl text-sm text-[#94a3b8] hover:text-white transition-colors">Cancel</button>
               <button onClick={save} disabled={!form.title.trim()}
-                className="flex items-center gap-2 gradient-violet text-white text-sm font-semibold px-5 py-2 rounded-xl hover:scale-105 transition-all disabled:opacity-50 disabled:scale-100">
+                className="flex items-center gap-2 gradient-orange text-white text-sm font-semibold px-5 py-2 rounded-xl hover:scale-105 transition-all disabled:opacity-50 disabled:scale-100">
                 <Check size={15} /> {editId ? "Save Changes" : "Publish Post"}
               </button>
             </div>
@@ -211,7 +211,7 @@ export default function AdminCommunityPage() {
                 <span>👍 {p.likes}</span>
                 <span>💬 {p.replies} replies</span>
                 <span>👁 {p.views} views</span>
-                {p.tags.map((t) => <span key={t} className="text-[#7c3aed]/60">#{t}</span>)}
+                {p.tags.map((t) => <span key={t} className="text-[#d97706]/60">#{t}</span>)}
               </div>
             </div>
             <div className="flex items-center gap-1.5 shrink-0">
@@ -219,7 +219,7 @@ export default function AdminCommunityPage() {
                 className={`p-2 rounded-lg transition-colors ${p.pinned ? "text-[#f59e0b] hover:bg-[#f59e0b]/10" : "text-[#64748b] hover:text-[#f59e0b] hover:bg-[#f59e0b]/10"}`}>
                 {p.pinned ? <PinOff size={15} /> : <Pin size={15} />}
               </button>
-              <button onClick={() => openEdit(p)} className="p-2 rounded-lg text-[#64748b] hover:text-[#a78bfa] hover:bg-[#7c3aed]/10 transition-colors"><Pencil size={15} /></button>
+              <button onClick={() => openEdit(p)} className="p-2 rounded-lg text-[#64748b] hover:text-[#a78bfa] hover:bg-[#d97706]/10 transition-colors"><Pencil size={15} /></button>
               <button onClick={() => setDeleteId(p.id)} className="p-2 rounded-lg text-[#64748b] hover:text-red-400 hover:bg-red-500/10 transition-colors"><Trash2 size={15} /></button>
             </div>
           </div>

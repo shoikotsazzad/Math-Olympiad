@@ -7,10 +7,10 @@ import type { Tier } from "@/types";
 import { Search, Trash2, Eye, Users, UserX } from "lucide-react";
 
 const levelColors: Record<string, string> = {
-  Grandmaster: "#f59e0b", "Prime Master": "#7c3aed", Expert: "#10b981",
+  Grandmaster: "#f59e0b", "Prime Master": "#d97706", Expert: "#10b981",
   Advanced: "#3b82f6", Intermediate: "#0891b2", Beginner: "#64748b",
 };
-const tierColors: Record<Tier, string> = { Beginner: "#10b981", Intermediate: "#f59e0b", Advanced: "#7c3aed" };
+const tierColors: Record<Tier, string> = { Beginner: "#10b981", Intermediate: "#f59e0b", Advanced: "#d97706" };
 const tiers: Tier[] = ["Beginner", "Intermediate", "Advanced"];
 
 export default function AdminStudentsPage() {
@@ -44,11 +44,11 @@ export default function AdminStudentsPage() {
         <div className="relative">
           <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#64748b]" />
           <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search name or email..."
-            className="bg-white/[0.06] border border-white/[0.08] rounded-xl pl-9 pr-4 py-2 text-sm text-[#94a3b8] placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 w-60 transition-all" />
+            className="bg-white/[0.06] border border-white/[0.08] rounded-xl pl-9 pr-4 py-2 text-sm text-[#94a3b8] placeholder-[#475569] outline-none focus:border-[#d97706]/50 w-60 transition-all" />
         </div>
         <div className="flex flex-wrap gap-2">
           <button onClick={() => setFilterTier("All")}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${filterTier === "All" ? "gradient-violet text-white" : "bg-white/[0.06] text-[#94a3b8] hover:text-white"}`}>
+            className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${filterTier === "All" ? "gradient-orange text-white" : "bg-white/[0.06] text-[#94a3b8] hover:text-white"}`}>
             All Tiers
           </button>
           {tiers.map((t) => (
@@ -97,7 +97,7 @@ export default function AdminStudentsPage() {
                 <tr key={u.id} className="border-t border-white/[0.04] hover:bg-white/[0.02] transition-colors">
                   <td className="py-3.5 px-6">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 gradient-violet rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0">{u.name[0]}</div>
+                      <div className="w-8 h-8 gradient-orange rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0">{u.name[0]}</div>
                       <div className="min-w-0">
                         <p className="text-sm font-medium text-white truncate">{u.name}</p>
                         <p className="text-xs text-[#64748b] truncate hidden sm:block">{u.email}</p>
@@ -119,7 +119,7 @@ export default function AdminStudentsPage() {
                   </td>
                   <td className="py-3.5 px-6">
                     <div className="flex items-center gap-1.5 justify-end">
-                      <Link href={`/admin/students/${u.id}`} className="p-1.5 rounded-lg text-[#64748b] hover:text-[#a78bfa] hover:bg-[#7c3aed]/10 transition-colors"><Eye size={14} /></Link>
+                      <Link href={`/admin/students/${u.id}`} className="p-1.5 rounded-lg text-[#64748b] hover:text-[#a78bfa] hover:bg-[#d97706]/10 transition-colors"><Eye size={14} /></Link>
                       <button onClick={() => setDeleteId(u.id)} className="p-1.5 rounded-lg text-[#64748b] hover:text-red-400 hover:bg-red-500/10 transition-colors"><Trash2 size={14} /></button>
                     </div>
                   </td>

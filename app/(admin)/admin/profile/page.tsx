@@ -71,7 +71,7 @@ export default function AdminProfilePage() {
         {/* Profile Card */}
         <div className="md:col-span-1 space-y-6">
           <div className="glass rounded-2xl p-6 flex flex-col items-center text-center">
-            <div className="w-24 h-24 gradient-violet rounded-full flex items-center justify-center text-white text-3xl font-bold mb-4 border-4 border-white/10">
+            <div className="w-24 h-24 gradient-orange rounded-full flex items-center justify-center text-white text-3xl font-bold mb-4 border-4 border-white/10">
               {user.name[0]}
             </div>
             <h2 className="text-xl font-bold text-white">{user.name}</h2>
@@ -82,12 +82,12 @@ export default function AdminProfilePage() {
             
             <div className="w-full space-y-3 text-left">
               <div className="flex items-center gap-3 text-xs text-[#94a3b8]">
-                <Mail size={14} className="text-[#7c3aed]" />
+                <Mail size={14} className="text-[#d97706]" />
                 <span className="truncate">{user.email}</span>
               </div>
               {user.phone && (
                 <div className="flex items-center gap-3 text-xs text-[#94a3b8]">
-                  <Phone size={14} className="text-[#7c3aed]" />
+                  <Phone size={14} className="text-[#d97706]" />
                   <span>{user.phone}</span>
                 </div>
               )}
@@ -127,7 +127,7 @@ export default function AdminProfilePage() {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#7c3aed]/50 outline-none transition-all"
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#d97706]/50 outline-none transition-all"
                   placeholder="Enter your name"
                 />
               </div>
@@ -151,7 +151,7 @@ export default function AdminProfilePage() {
                   name="department"
                   value={formData.department}
                   onChange={handleChange}
-                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#7c3aed]/50 outline-none transition-all"
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#d97706]/50 outline-none transition-all"
                   placeholder="e.g. CSE"
                 />
               </div>
@@ -163,7 +163,7 @@ export default function AdminProfilePage() {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#7c3aed]/50 outline-none transition-all"
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#d97706]/50 outline-none transition-all"
                   placeholder="+880..."
                 />
               </div>
@@ -176,7 +176,7 @@ export default function AdminProfilePage() {
                   type="date"
                   value={formData.dob}
                   onChange={handleChange}
-                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#7c3aed]/50 outline-none transition-all [color-scheme:dark]"
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#d97706]/50 outline-none transition-all [color-scheme:dark]"
                 />
               </div>
               <div className="space-y-1.5">
@@ -187,7 +187,7 @@ export default function AdminProfilePage() {
                   name="gender"
                   value={formData.gender}
                   onChange={handleChange}
-                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#7c3aed]/50 outline-none transition-all"
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#d97706]/50 outline-none transition-all"
                 >
                   <option value="" className="bg-[#0f0f1a]">Select Gender</option>
                   <option value="Male" className="bg-[#0f0f1a]">Male</option>
@@ -205,7 +205,7 @@ export default function AdminProfilePage() {
                 name="address"
                 value={formData.address}
                 onChange={handleChange}
-                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#7c3aed]/50 outline-none transition-all"
+                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#d97706]/50 outline-none transition-all"
                 placeholder="Full address..."
               />
             </div>
@@ -219,7 +219,7 @@ export default function AdminProfilePage() {
                 value={formData.about}
                 onChange={handleChange}
                 rows={4}
-                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white focus:border-[#7c3aed]/50 outline-none transition-all resize-none"
+                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white focus:border-[#d97706]/50 outline-none transition-all resize-none"
                 placeholder="Tell us about yourself..."
               />
             </div>
@@ -233,7 +233,7 @@ export default function AdminProfilePage() {
               <button
                 type="submit"
                 disabled={isSaving}
-                className="ml-auto flex items-center gap-2 gradient-violet glow-violet text-white text-sm font-semibold px-6 py-2.5 rounded-xl hover:scale-105 transition-all disabled:opacity-50 disabled:scale-100"
+                className="ml-auto flex items-center gap-2 gradient-orange glow-orange text-white text-sm font-semibold px-6 py-2.5 rounded-xl hover:scale-105 transition-all disabled:opacity-50 disabled:scale-100"
               >
                 <Save size={16} />
                 {isSaving ? "Saving..." : "Save Profile"}

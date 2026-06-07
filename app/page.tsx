@@ -1,7 +1,7 @@
 import Navbar from "@/components/layout/Navbar";
 import HeroSection from "@/components/home/HeroSection";
-import FeatureCards from "@/components/home/FeatureCards";
-import LeaderboardPreview from "@/components/home/LeaderboardPreview";
+import OurActivitySection from "@/components/home/OurActivitySection";
+import KeyInitiativesSection from "@/components/home/KeyInitiativesSection";
 import Footer from "@/components/layout/Footer";
 
 export default function HomePage() {
@@ -10,8 +10,8 @@ export default function HomePage() {
       <Navbar />
       <main className="flex-1">
         <HeroSection />
-        <FeatureCards />
-        <LeaderboardPreview />
+        <OurActivitySection />
+        <KeyInitiativesSection />
       </main>
       <Footer />
     </div>

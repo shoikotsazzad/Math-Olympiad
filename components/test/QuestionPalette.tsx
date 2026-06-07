@@ -9,16 +9,16 @@ interface Props {
 }
 
 const stateStyles: Record<QuestionState, string> = {
-  answered: "bg-[#10b981]/20 border-[#10b981]/40 text-[#10b981]",
-  marked: "bg-[#f59e0b]/20 border-[#f59e0b]/40 text-[#f59e0b]",
-  unanswered: "bg-white/[0.04] border-white/[0.1] text-[#94a3b8]",
-  skipped: "bg-red-500/10 border-red-500/30 text-red-400",
+  answered: "bg-[#10b981]/15 border-[#10b981]/35 text-[#10b981] font-bold",
+  marked: "bg-[#f59e0b]/15 border-[#f59e0b]/35 text-[#f59e0b] font-bold",
+  unanswered: "bg-slate-100 border-slate-200 text-slate-500",
+  skipped: "bg-red-50 border-red-200 text-red-500",
 };
 
 export default function QuestionPalette({ questions, states, currentIdx, onJump }: Props) {
   return (
-    <div className="glass rounded-xl p-4">
-      <p className="text-xs text-[#94a3b8] uppercase tracking-wider mb-3">Question Palette</p>
+    <div className="bg-white rounded-xl p-4" style={{ border: "1px solid rgba(15,23,42,0.07)", boxShadow: "0 2px 8px rgba(15,23,42,0.05)" }}>
+      <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-3">Question Palette</p>
       <div className="grid grid-cols-5 gap-2">
         {questions.map((q, idx) => {
           const state = states[q.id] ?? "unanswered";
@@ -30,7 +30,7 @@ export default function QuestionPalette({ questions, states, currentIdx, onJump 
               className={cn(
                 "w-9 h-9 rounded-lg border text-xs font-semibold transition-all",
                 isCurrent
-                  ? "gradient-violet text-white border-[#7c3aed] scale-110 shadow-lg shadow-[#7c3aed]/30"
+                  ? "gradient-orange text-white border-[#d97706] scale-110 shadow-lg shadow-amber-500/25"
                   : stateStyles[state]
               )}
             >

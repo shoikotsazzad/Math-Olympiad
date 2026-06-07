@@ -9,12 +9,12 @@ import {
 } from "lucide-react";
 
 const typeColors: Record<string, string> = {
-  IMO: "#7c3aed", BdMO: "#10b981", AMC: "#f59e0b", INTERNAL: "#0891b2",
+  IMO: "#d97706", BdMO: "#10b981", AMC: "#f59e0b", INTERNAL: "#0891b2",
 };
 const internalTypeColors: Record<string, string> = {
-  "MOCK SESSION": "#7c3aed", "DISCUSSION CLASS": "#0891b2", CHALLENGE: "#f59e0b",
+  "MOCK SESSION": "#d97706", "DISCUSSION CLASS": "#0891b2", CHALLENGE: "#f59e0b",
 };
-const tierColors: Record<Tier, string> = { Beginner: "#10b981", Intermediate: "#f59e0b", Advanced: "#7c3aed" };
+const tierColors: Record<Tier, string> = { Beginner: "#10b981", Intermediate: "#f59e0b", Advanced: "#d97706" };
 const olympiadTypes: OlympiadType[] = ["IMO", "BdMO", "AMC", "INTERNAL"];
 const internalTypes = ["MOCK SESSION", "DISCUSSION CLASS", "CHALLENGE"];
 const internalColorOptions = ["violet", "blue", "gold", "green", "red"];
@@ -123,7 +123,7 @@ export default function AdminEventsPage() {
           <p className="text-[#94a3b8] text-sm mt-1">Create, edit and manage olympiad events, internal sessions, and live exams.</p>
         </div>
         <button onClick={onCreate}
-          className="flex items-center gap-2 gradient-violet glow-violet text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:scale-105 transition-all">
+          className="flex items-center gap-2 gradient-orange glow-orange text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:scale-105 transition-all">
           <Plus size={16} /> {newLabel}
         </button>
       </div>
@@ -133,7 +133,7 @@ export default function AdminEventsPage() {
         <div className="flex gap-2">
           {([["olympiad", "Olympiad Events"], ["internal", "Internal Sessions"], ["live-exam", "Live Exams"]] as [Tab, string][]).map(([t, label]) => (
             <button key={t} onClick={() => { setTab(t); setShowForm(false); }}
-              className={`px-4 py-2 rounded-full text-xs font-medium transition-all ${tab === t ? "gradient-violet text-white" : "bg-white/[0.06] text-[#94a3b8] hover:text-white hover:bg-white/[0.1]"}`}>
+              className={`px-4 py-2 rounded-full text-xs font-medium transition-all ${tab === t ? "gradient-orange text-white" : "bg-white/[0.06] text-[#94a3b8] hover:text-white hover:bg-white/[0.1]"}`}>
               {label}
             </button>
           ))}
@@ -141,13 +141,13 @@ export default function AdminEventsPage() {
         <div className="relative ml-auto">
           <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#64748b]" />
           <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search events..."
-            className="bg-white/[0.06] border border-white/[0.08] rounded-xl pl-9 pr-4 py-2 text-sm text-[#94a3b8] placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 w-52 transition-all" />
+            className="bg-white/[0.06] border border-white/[0.08] rounded-xl pl-9 pr-4 py-2 text-sm text-[#94a3b8] placeholder-[#475569] outline-none focus:border-[#d97706]/50 w-52 transition-all" />
         </div>
       </div>
 
       {/* Create / Edit Form */}
       {showForm && (
-        <div className="glass rounded-2xl p-6 border border-[#7c3aed]/30 space-y-4">
+        <div className="glass rounded-2xl p-6 border border-[#d97706]/30 space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="font-heading font-semibold text-white">
               {editId ? "Edit" : "New"} {tab === "olympiad" ? "Olympiad Event" : tab === "internal" ? "Internal Session" : "Live Exam"}
@@ -162,12 +162,12 @@ export default function AdminEventsPage() {
                   <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Title *</label>
                   <input value={evForm.title} onChange={(e) => setEvForm({ ...evForm, title: e.target.value })}
                     placeholder="e.g. International Mathematical Olympiad"
-                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all" />
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/50 transition-all" />
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Type</label>
                   <select value={evForm.type} onChange={(e) => setEvForm({ ...evForm, type: e.target.value as OlympiadType })}
-                    className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50">
+                    className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#d97706]/50">
                     {olympiadTypes.map((t) => <option key={t} value={t} className="bg-[#0f0f1a]">{t}</option>)}
                   </select>
                 </div>
@@ -177,33 +177,33 @@ export default function AdminEventsPage() {
                   <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Date</label>
                   <input value={evForm.date} onChange={(e) => setEvForm({ ...evForm, date: e.target.value })}
                     placeholder="e.g. July 11-22, 2024"
-                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all" />
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/50 transition-all" />
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Location</label>
                   <input value={evForm.location} onChange={(e) => setEvForm({ ...evForm, location: e.target.value })}
                     placeholder="e.g. United Kingdom"
-                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all" />
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/50 transition-all" />
                 </div>
               </div>
               <div className="space-y-1.5">
                 <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Description</label>
                 <textarea value={evForm.description} onChange={(e) => setEvForm({ ...evForm, description: e.target.value })}
                   rows={2} placeholder="Brief description..."
-                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all resize-none" />
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/50 transition-all resize-none" />
               </div>
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Official Link</label>
                   <input value={evForm.officialLink ?? ""} onChange={(e) => setEvForm({ ...evForm, officialLink: e.target.value })}
                     placeholder="https://..."
-                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all" />
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/50 transition-all" />
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Registration Link</label>
                   <input value={evForm.registrationLink ?? ""} onChange={(e) => setEvForm({ ...evForm, registrationLink: e.target.value })}
                     placeholder="https://..."
-                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all" />
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/50 transition-all" />
                 </div>
               </div>
             </>
@@ -216,13 +216,13 @@ export default function AdminEventsPage() {
                   <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Title *</label>
                   <input value={intForm.title} onChange={(e) => setIntForm({ ...intForm, title: e.target.value })}
                     placeholder="e.g. UIU Grand Mock 05"
-                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all" />
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/50 transition-all" />
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Subtitle</label>
                   <input value={intForm.subtitle} onChange={(e) => setIntForm({ ...intForm, subtitle: e.target.value })}
                     placeholder="e.g. Topic: Combinatorics"
-                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all" />
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/50 transition-all" />
                 </div>
               </div>
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -230,25 +230,25 @@ export default function AdminEventsPage() {
                   <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Date</label>
                   <input value={intForm.date} onChange={(e) => setIntForm({ ...intForm, date: e.target.value })}
                     placeholder="e.g. Sat, 21 Oct"
-                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all" />
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/50 transition-all" />
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Time</label>
                   <input value={intForm.time} onChange={(e) => setIntForm({ ...intForm, time: e.target.value })}
                     placeholder="e.g. 3:00 PM"
-                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all" />
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/50 transition-all" />
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Type</label>
                   <select value={intForm.type} onChange={(e) => setIntForm({ ...intForm, type: e.target.value })}
-                    className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50">
+                    className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#d97706]/50">
                     {internalTypes.map((t) => <option key={t} value={t} className="bg-[#0f0f1a]">{t}</option>)}
                   </select>
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Color</label>
                   <select value={intForm.typeColor} onChange={(e) => setIntForm({ ...intForm, typeColor: e.target.value })}
-                    className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50">
+                    className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#d97706]/50">
                     {internalColorOptions.map((c) => <option key={c} value={c} className="bg-[#0f0f1a]">{c}</option>)}
                   </select>
                 </div>
@@ -263,12 +263,12 @@ export default function AdminEventsPage() {
                   <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Title *</label>
                   <input value={leForm.title} onChange={(e) => setLeForm({ ...leForm, title: e.target.value })}
                     placeholder="e.g. Monthly Olympiad — May"
-                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all" />
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/50 transition-all" />
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Tier</label>
                   <select value={leForm.tier} onChange={(e) => setLeForm({ ...leForm, tier: e.target.value as Tier })}
-                    className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50">
+                    className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#d97706]/50">
                     {tiers.map((t) => <option key={t} value={t} className="bg-[#0f0f1a]">{t}</option>)}
                   </select>
                 </div>
@@ -277,37 +277,37 @@ export default function AdminEventsPage() {
                 <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Description</label>
                 <textarea value={leForm.description} onChange={(e) => setLeForm({ ...leForm, description: e.target.value })}
                   rows={2} placeholder="Brief description..."
-                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#7c3aed]/50 transition-all resize-none" />
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-[#475569] outline-none focus:border-[#d97706]/50 transition-all resize-none" />
               </div>
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="space-y-1.5 lg:col-span-2">
                   <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Scheduled At *</label>
                   <input type="datetime-local" value={leForm.scheduledAt} onChange={(e) => setLeForm({ ...leForm, scheduledAt: e.target.value })}
-                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50 transition-all [color-scheme:dark]" />
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#d97706]/50 transition-all [color-scheme:dark]" />
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Duration (min)</label>
                   <input type="number" min={10} value={leForm.duration} onChange={(e) => setLeForm({ ...leForm, duration: Number(e.target.value) })}
-                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50 transition-all" />
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#d97706]/50 transition-all" />
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Questions</label>
                   <input type="number" min={1} value={leForm.questionCount} onChange={(e) => setLeForm({ ...leForm, questionCount: Number(e.target.value) })}
-                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50 transition-all" />
+                    className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#d97706]/50 transition-all" />
                 </div>
               </div>
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Topic</label>
                   <select value={leForm.topicId} onChange={(e) => setLeForm({ ...leForm, topicId: e.target.value })}
-                    className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50">
+                    className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#d97706]/50">
                     {topicList.map((t) => <option key={t} value={t} className="bg-[#0f0f1a]">{t.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}</option>)}
                   </select>
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-xs text-[#94a3b8] uppercase tracking-wider">Status</label>
                   <select value={leForm.status} onChange={(e) => setLeForm({ ...leForm, status: e.target.value as LiveExam["status"] })}
-                    className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#7c3aed]/50">
+                    className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#d97706]/50">
                     {(["upcoming", "live", "ended"] as LiveExam["status"][]).map((s) => <option key={s} value={s} className="bg-[#0f0f1a]">{s}</option>)}
                   </select>
                 </div>
@@ -320,7 +320,7 @@ export default function AdminEventsPage() {
             <button
               onClick={tab === "olympiad" ? saveOlympiad : tab === "internal" ? saveInternal : saveLiveExam}
               disabled={tab === "olympiad" ? !evForm.title.trim() : tab === "internal" ? !intForm.title.trim() : (!leForm.title.trim() || !leForm.scheduledAt)}
-              className="flex items-center gap-2 gradient-violet text-white text-sm font-semibold px-5 py-2 rounded-xl hover:scale-105 transition-all disabled:opacity-50 disabled:scale-100">
+              className="flex items-center gap-2 gradient-orange text-white text-sm font-semibold px-5 py-2 rounded-xl hover:scale-105 transition-all disabled:opacity-50 disabled:scale-100">
               <Check size={15} /> {editId ? "Save Changes" : "Create"}
             </button>
           </div>
@@ -342,7 +342,7 @@ export default function AdminEventsPage() {
       {tab === "olympiad" && (
         <div className="space-y-3">
           {filteredEvents.map((ev) => {
-            const color = typeColors[ev.type] ?? "#7c3aed";
+            const color = typeColors[ev.type] ?? "#d97706";
             return (
               <div key={ev.id} className="glass rounded-2xl p-5 flex items-start justify-between gap-4">
                 <div className="flex-1 min-w-0 space-y-2">
@@ -361,7 +361,7 @@ export default function AdminEventsPage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-1.5 shrink-0">
-                  <button onClick={() => openEditOlympiad(ev)} className="p-2 rounded-lg text-[#64748b] hover:text-[#a78bfa] hover:bg-[#7c3aed]/10 transition-colors"><Pencil size={15} /></button>
+                  <button onClick={() => openEditOlympiad(ev)} className="p-2 rounded-lg text-[#64748b] hover:text-[#a78bfa] hover:bg-[#d97706]/10 transition-colors"><Pencil size={15} /></button>
                   <button onClick={() => { setDeleteId(ev.id); setTab("olympiad"); }} className="p-2 rounded-lg text-[#64748b] hover:text-red-400 hover:bg-red-500/10 transition-colors"><Trash2 size={15} /></button>
                 </div>
               </div>
@@ -376,7 +376,7 @@ export default function AdminEventsPage() {
       {tab === "internal" && (
         <div className="space-y-3">
           {filteredInternal.map((ev) => {
-            const color = internalTypeColors[ev.type] ?? "#7c3aed";
+            const color = internalTypeColors[ev.type] ?? "#d97706";
             return (
               <div key={ev.id} className="glass rounded-2xl p-5 flex items-start justify-between gap-4">
                 <div className="flex-1 min-w-0 space-y-1">
@@ -392,7 +392,7 @@ export default function AdminEventsPage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-1.5 shrink-0">
-                  <button onClick={() => openEditInternal(ev)} className="p-2 rounded-lg text-[#64748b] hover:text-[#a78bfa] hover:bg-[#7c3aed]/10 transition-colors"><Pencil size={15} /></button>
+                  <button onClick={() => openEditInternal(ev)} className="p-2 rounded-lg text-[#64748b] hover:text-[#a78bfa] hover:bg-[#d97706]/10 transition-colors"><Pencil size={15} /></button>
                   <button onClick={() => { setDeleteId(ev.id); setTab("internal"); }} className="p-2 rounded-lg text-[#64748b] hover:text-red-400 hover:bg-red-500/10 transition-colors"><Trash2 size={15} /></button>
                 </div>
               </div>
@@ -408,7 +408,7 @@ export default function AdminEventsPage() {
         <div className="space-y-3">
           {filteredLiveExams.map((ex) => {
             const tc = tierColors[ex.tier];
-            const statusColor = ex.status === "live" ? "#10b981" : ex.status === "upcoming" ? "#7c3aed" : "#475569";
+            const statusColor = ex.status === "live" ? "#10b981" : ex.status === "upcoming" ? "#d97706" : "#475569";
             const dt = new Date(ex.scheduledAt);
             return (
               <div key={ex.id} className="glass rounded-2xl p-5 flex items-start justify-between gap-4">
@@ -430,7 +430,7 @@ export default function AdminEventsPage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-1.5 shrink-0">
-                  <button onClick={() => openEditLiveExam(ex)} className="p-2 rounded-lg text-[#64748b] hover:text-[#a78bfa] hover:bg-[#7c3aed]/10 transition-colors"><Pencil size={15} /></button>
+                  <button onClick={() => openEditLiveExam(ex)} className="p-2 rounded-lg text-[#64748b] hover:text-[#a78bfa] hover:bg-[#d97706]/10 transition-colors"><Pencil size={15} /></button>
                   <button onClick={() => { setDeleteId(ex.id); setTab("live-exam"); }} className="p-2 rounded-lg text-[#64748b] hover:text-red-400 hover:bg-red-500/10 transition-colors"><Trash2 size={15} /></button>
                 </div>
               </div>
